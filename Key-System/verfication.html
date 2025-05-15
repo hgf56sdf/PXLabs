@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Successful</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --success: #38b000;
+            --dark: #212529;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4361ee, #7209b7);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+
+        .progress-container {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 3s ease;
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background-color: var(--success);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: scale(0);
+            transition: transform 0.5s ease;
+        }
+
+        .status-icon svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        .status-text {
+            margin-bottom: 20px;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .action-text {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verification Process</h1>
+        
+        <div id="loadingSection">
+            <p>Please wait while we verify your completion...</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="successSection" class="hidden">
+            <div class="status-icon" id="statusIcon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            
+            <h1>Verification Complete!</h1>
+            
+            <div class="status-text" id="statusText">
+                Your key has been unlocked successfully.
+            </div>
+            
+            <div class="action-text">
+                You can now return to the previous tab to see your key.
+                <br>This window will close automatically in <span id="countdown">5</span> seconds.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const config = {
+            // The key to set in localStorage for verification
+            verificationKey: 'linkvertise_done',
+            
+            // Delay before showing success message (in milliseconds)
+            verificationDelay: 3000,
+            
+            // Auto-close delay (in seconds)
+            autoCloseDelay: 5
+        };
+        
+        // DOM Elements
+        const loadingSection = document.getElementById('loadingSection');
+        const successSection = document.getElementById('successSection');
+        const progressFill = document.getElementById('progressFill');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusText = document.getElementById('statusText');
+        const countdown = document.getElementById('countdown');
+        
+        // Function to set the verification flag
+        function setVerificationFlag() {
+            // Set the localStorage flag that will be checked by the main page
+            localStorage.setItem(config.verificationKey, 'true');
+            
+            // Show the success section
+            loadingSection.classList.add('hidden');
+            successSection.classList.remove('hidden');
+            
+            // Animate the success elements
+            setTimeout(() => {
+                statusIcon.style.transform = 'scale(1)';
+                statusText.style.opacity = '1';
+            }, 100);
+            
+            // Start the countdown for auto-close
+            let secondsLeft = config.autoCloseDelay;
+            countdown.textContent = secondsLeft;
+            
+            const intervalId = setInterval(() => {
+                secondsLeft--;
+                countdown.textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(intervalId);
+                    window.close();
+                }
+            }, 1000);
+        }
+        
+        // Start the verification animation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate the progress bar
+            setTimeout(() => {
+                progressFill.style.width = '100%';
+            }, 100);
+            
+            // Set the verification flag after the delay
+            setTimeout(setVerificationFlag, config.verificationDelay);
+        });
+    </script>
+</body>
+</html>

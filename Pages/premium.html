@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PXLabs Premium - Unlock exclusive features and benefits">
+    <title>PXLabs Premium - Unlock Advanced Features</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <style>
+        /* ============================================
+           CSS Variables & Reset
+        ============================================ */
+        :root {
+            --primary-blue: #5865F2;
+            --secondary-purple: #9C59D8;
+            --dark-bg: #0C0C0C;
+            --dark-secondary: #1A1A1A;
+            --dark-accent: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --max-width: 1200px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --border-radius: 0.5rem;
+            --transition-fast: 0.2s ease;
+            --transition-slow: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        [dir="rtl"] {
+            direction: rtl;
+        }
+
+        /* ============================================
+           Typography
+        ============================================ */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           Layout Containers
+        ============================================ */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--spacing-sm);
+        }
+
+        /* ============================================
+           Header & Navigation
+        ============================================ */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--dark-accent);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: var(--spacing-md);
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .lang-toggle {
+            background: var(--dark-accent);
+            border: none;
+            color: var(--text-primary);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.9rem;
+        }
+
+        .lang-toggle:hover {
+            background: var(--primary-blue);
+        }
+
+        /* ============================================
+           Main Content
+        ============================================ */
+        main {
+            margin-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           Hero Section
+        ============================================ */
+        .hero {
+            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-sm);
+        }
+
+        .hero h1 {
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto var(--spacing-lg) auto;
+            line-height: 1.8;
+        }
+
+        .premium-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--primary-blue);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        .premium-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .premium-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ============================================
+           Features Grid
+        ============================================ */
+        .features {
+            padding: var(--spacing-xl) var(--spacing-sm);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .feature-card {
+            background: var(--dark-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-blue);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            transition: width var(--transition-slow);
+        }
+
+        .feature-card:hover::before {
+            width: 100%;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           Plans Section
+        ============================================ */
+        .plans {
+            padding: var(--spacing-xl) var(--spacing-sm);
+            text-align: center;
+            background: var(--dark-secondary);
+        }
+
+        .coming-soon {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-md);
+            position: relative;
+            display: inline-block;
+        }
+
+        .coming-soon::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            bottom: 8px;
+            right: -12px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* ============================================
+           Footer
+        ============================================ */
+        footer {
+            background: var(--dark-secondary);
+            padding: var(--spacing-lg) 0;
+            text-align: center;
+            border-top: 1px solid var(--dark-accent);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           Animations
+        ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           Mobile Menu
+        ============================================ */
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* ============================================
+           Responsive Design
+        ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark-secondary);
+                flex-direction: column;
+                padding: var(--spacing-sm);
+                border-bottom: 1px solid var(--dark-accent);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           Utility Classes
+        ============================================ */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         Header Section
+    ============================================ -->
+    <header>
+        <nav class="container">
+            <div class="logo">PXLabs</div>
+            <button class="mobile-menu" onclick="toggleMenu()" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html" data-translate="nav-home">Home</a></li>
+                <li><a href="tools.html" data-translate="nav-tools">Tools</a></li>
+                <li><a href="tutorials.html" data-translate="nav-tutorials">YouTube Tutorials</a></li>
+                <li><a href="reviews.html" data-translate="nav-reviews">Reviews</a></li>
+                <li><a href="updates.html" data-translate="nav-updates">Updates</a></li>
+            </ul>
+            <button class="lang-toggle" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i> <span id="currentLang">EN</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ============================================
+         Main Content
+    ============================================ -->
+    <main>
+        <section class="hero container fade-in">
+            <h1 data-translate="hero-title">Unlock Premium Features</h1>
+            <p data-translate="hero-desc">Take your creativity to the next level with PXLabs Premium. Get early access to new tools, exclusive features, and priority support.</p>
+            <button class="premium-btn" data-translate="premium-join">
+                <i class="fas fa-crown"></i>
+                Join Premium
+            </button>
+        </section>
+
+        <section class="features container">
+            <h2 class="section-title fade-in" data-translate="features-title">Premium Benefits</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="card-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="feature-title" data-translate="feature-early-title">Early Access</h3>
+                    <p class="feature-description" data-translate="feature-early-desc">Be the first to try new tools and features before they're released to the public. Stay ahead of the curve.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="card-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="feature-title" data-translate="feature-exclusive-title">Premium-only Features</h3>
+                    <p class="feature-description" data-translate="feature-exclusive-desc">Access exclusive tools and features available only to Premium members. Enhance your workflow with advanced capabilities.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="card-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3 class="feature-title" data-translate="feature-key-title">No Key Required</h3>
+                    <p class="feature-description" data-translate="feature-key-desc">Access all locked tools without needing to enter any keys. Seamlessly use the entire suite of PXLabs tools.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title" data-translate="feature-support-title">Prioritized Support</h3>
+                    <p class="feature-description" data-translate="feature-support-desc">Get faster responses and dedicated support from our team. Your questions and issues are our top priority.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="plans container">
+            <h2 class="section-title fade-in" data-translate="plans-title">Subscription Plans</h2>
+            <div class="coming-soon fade-in" data-translate="plans-coming-soon">Coming Soon</div>
+        </section>
+    </main>
+
+    <!-- ============================================
+         Footer Section
+    ============================================ -->
+    <footer>
+        <div class="container">
+            <p>© 2025 PXLabs. <span data-translate="footer-rights">All rights reserved.</span></p>
+        </div>
+    </footer>
+
+    <script>
+        /* ============================================
+           Translation Data
+        ============================================ */
+        const translations = {
+            en: {
+                'nav-home': 'Home',
+                'nav-tools': 'Tools',
+                'nav-tutorials': 'YouTube Tutorials',
+                'nav-reviews': 'Reviews',
+                'nav-updates': 'Updates',
+                'hero-title': 'Unlock Premium Features',
+                'hero-desc': 'Take your creativity to the next level with PXLabs Premium. Get early access to new tools, exclusive features, and priority support.',
+                'premium-join': 'Join Premium',
+                'features-title': 'Premium Benefits',
+                'feature-early-title': 'Early Access',
+                'feature-early-desc': 'Be the first to try new tools and features before they\'re released to the public. Stay ahead of the curve.',
+                'feature-exclusive-title': 'Premium-only Features',
+                'feature-exclusive-desc': 'Access exclusive tools and features available only to Premium members. Enhance your workflow with advanced capabilities.',
+                'feature-key-title': 'No Key Required',
+                'feature-key-desc': 'Access all locked tools without needing to enter any keys. Seamlessly use the entire suite of PXLabs tools.',
+                'feature-support-title': 'Prioritized Support',
+                'feature-support-desc': 'Get faster responses and dedicated support from our team. Your questions and issues are our top priority.',
+                'plans-title': 'Subscription Plans',
+                'plans-coming-soon': 'Coming Soon',
+                'footer-rights': 'All rights reserved.'
+            },
+            ar: {
+                'nav-home': 'الرئيسية',
+                'nav-tools': 'الأدوات',
+                'nav-tutorials': 'شروحات اليوتيوب',
+                'nav-reviews': 'التقييمات',
+                'nav-updates': 'التحديثات',
+                'hero-title': 'احصل على ميزات بريميوم',
+                'hero-desc': 'ارتقِ بإبداعك إلى المستوى التالي مع PXLabs Premium. احصل على وصول مبكر إلى أدوات جديدة، ميزات حصرية، ودعم ذو أولوية.',
+                'premium-join': 'انضم إلى البريميوم',
+                'features-title': 'مزايا البريميوم',
+                'feature-early-title': 'وصول مبكر',
+                'feature-early-desc': 'كن أول من يجرب الأدوات والميزات الجديدة قبل إصدارها للجمهور. ابق متقدمًا على منحنى التطور.',
+                'feature-exclusive-title': 'ميزات حصرية للبريميوم',
+                'feature-exclusive-desc': 'الوصول إلى أدوات وميزات حصرية متاحة فقط لأعضاء البريميوم. عزز سير عملك بقدرات متقدمة.',
+                'feature-key-title': 'لا حاجة لمفتاح',
+                'feature-key-desc': 'الوصول إلى جميع الأدوات المقفلة دون الحاجة إلى إدخال أي مفاتيح. استخدم بسلاسة مجموعة أدوات PXLabs بأكملها.',
+                'feature-support-title': 'دعم ذو أولوية',
+                'feature-support-desc': 'احصل على ردود أسرع ودعم مخصص من فريقنا. أسئلتك ومشاكلك هي أولويتنا القصوى.',
+                'plans-title': 'خطط الاشتراك',
+                'plans-coming-soon': 'قريبًا',
+                'footer-rights': 'جميع الحقوق محفوظة.'
+            }
+        };
+
+        /* ============================================
+           Global State
+        ============================================ */
+        let currentLang = 'en';
+
+        /* ============================================
+           Utility Functions
+        ============================================ */
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        /* ============================================
+           Language Toggle
+        ============================================ */
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.getElementById('currentLang').textContent = currentLang.toUpperCase();
+            document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', currentLang);
+            
+            // Update all translated elements
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+        }
+
+        /* ============================================
+           Mobile Menu Toggle
+        ============================================ */
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        /* ============================================
+           Intersection Observer for Animations
+        ============================================ */
+        function initAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '50px'
+            });
+
+            document.querySelectorAll('.fade-in').forEach((element, index) => {
+                element.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(element);
+            });
+        }
+
+        /* ============================================
+           Event Listeners
+        ============================================ */
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimations();
+            
+            // Close mobile menu on outside click
+            document.addEventListener('click', (e) => {
+                const navLinks = document.getElementById('navLinks');
+                const mobileMenu = document.querySelector('.mobile-menu');
+                
+                if (!navLinks.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Handle window resize for mobile menu
+        window.addEventListener('resize', debounce(() => {
+            if (window.innerWidth > 768) {
+                document.getElementById('navLinks').classList.remove('active');
+            }
+        }, 250));
+    </script>
+</body>
+</html>

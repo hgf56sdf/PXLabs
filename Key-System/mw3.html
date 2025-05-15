@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Key System</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #38b000;
+            --danger: #d90429;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4361ee, #7209b7);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--dark);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -150px;
+            right: -150px;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            transform: translateY(0);
+            backdrop-filter: blur(10px);
+        }
+
+        .container:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .step {
+            margin-bottom: 25px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .step-text {
+            display: inline-block;
+            vertical-align: top;
+            line-height: 28px;
+            font-size: 16px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .button:hover::before {
+            left: 100%;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .key-container {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .key-box {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key-box::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .key-value {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: var(--dark);
+            word-break: break-all;
+        }
+
+        .copy-button {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 0 auto;
+        }
+
+        .copy-button:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+
+        .copy-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 15px;
+        }
+
+        .status-message {
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .status-success {
+            background-color: rgba(56, 176, 0, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-error {
+            background-color: rgba(217, 4, 41, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Premium Key System</h1>
+
+        <div class="initial-content">
+            <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-text">Click the button below to get your key</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-text">Complete the Linkvertise process</span>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-text">Return to this page to reveal your key</span>
+            </div>
+
+            <button id="getKeyBtn" class="button pulse">Get Your Premium Key</button>
+        </div>
+
+        <div class="loading" id="loadingSection">
+            <div class="loading-spinner"></div>
+            <p>Verifying your completion...</p>
+        </div>
+
+        <div class="status-message status-error" id="errorMessage">
+            Please complete the Linkvertise process to get your key
+        </div>
+
+        <div class="status-message status-success" id="successMessage">
+            Verification successful! Here's your premium key
+        </div>
+
+        <div class="key-container" id="keyContainer">
+            <div class="key-box">
+                <p class="key-value" id="keyValue">XXXX-XXXX-XXXX-XXXX</p>
+            </div>
+            <button id="copyKeyBtn" class="copy-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                </svg>
+                Copy Key
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration (can be modified)
+        const config = {
+            // Replace with your actual Linkvertise URL
+            linkvertiseUrl: 'https://link-hub.net/648459/mw3extra-download-file',
+            
+            // The URL that the user will be redirected to after completing Linkvertise
+            // This page should set localStorage.setItem("linkvertise_done", "true")
+            verificationUrl: 'https://pxlabs.netlify.app/key-system/verfication',
+            
+            // localStorage key that will be set by the verification page
+            verificationKey: 'linkvertise_done',
+            
+            // Specific premium keys (hardcoded)
+            premiumKeys: [
+"Z9XK72LMQ48V",
+"JQ7MW9ZK8F2B",
+"P7CVK4NZW5XA",
+"R2X9YZ1KMQ6B",
+"HT4PDQ3XZ9KM",
+"VXN8JZQ2LF7R",
+"MB5TRA9KXYQ2",
+"K6YEMU1P90LZ",
+"QRZ1VP7KM6TD",
+"XPMQ8Z4DLYRV",
+"LT9FD37XZYKW",
+"9WXRKL7DVYP8",
+"AZXY75QMNC6R",
+"MQN3YKXP0AZV",
+"B91KZ8MWRQXF",
+"PL0MN2ZDYK7Q",
+"3KZNYRPAQX58",
+"ZYMPKWX4AR9L",
+"TK92XZVLQF7D",
+"RDYWPZL3X0KM",
+"XMN9KPYWZR7Q",
+"7RQBYXZMLKV9",
+"LQVPKD83WXNY",
+"CPQ8MYXLZF90",
+"ZFQ3WN0LKRAY",
+"N8PWMYLK3FQ7",
+"PZLQXR38Y9KM",
+"MYKZ31VRWLPX",
+"R7DMWY40ZKXQ",
+"KFZPYRML3WQ9",
+"YMX7VRKLPQ4Z",
+"1KLDPWYZXM37",
+"MYP9W8XRZK3Q",
+"0ZRWKYLPNV8Q",
+"XQRMPV97YZLD",
+"PYLWX8KZ7DQ3",
+"LZKQW91XRPMY",
+"9MWKP7YZQ4LD",
+"ZRYXM0PL3VWK",
+"WZPDKXM3YRQL",
+"FMXL7W9QPZK0",
+"ZXKQMWPRLN38",
+"4XPZMRYKWL90",
+"DRQPXKMWYZ83",
+"PQWKL0ZVMYRX",
+"ZPMKW83YRXLD",
+"YR3XMKVPQZ9L",
+"MX9KYZ4PLWQ3",
+"TQZKMWR9PYV0",
+"M9WKYZPLXQR8"
+            ],
+            
+            // Interval time for checking localStorage (in milliseconds)
+            checkInterval: 1000,
+            
+            // Maximum time to wait for verification (in milliseconds)
+            maxWaitTime: 300000 // 5 minutes
+        };
+
+        // DOM Elements
+        const getKeyBtn = document.getElementById('getKeyBtn');
+        const keyContainer = document.getElementById('keyContainer');
+        const keyValue = document.getElementById('keyValue');
+        const copyKeyBtn = document.getElementById('copyKeyBtn');
+        const loadingSection = document.getElementById('loadingSection');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const initialContent = document.querySelector('.initial-content');
+
+        // Variable to store the interval ID
+        let verificationInterval = null;
+        // Variable to track start time for verification
+        let verificationStartTime = null;
+
+        // Check if key was previously revealed - now only checks for current session
+        function checkVerificationStatus() {
+            // Check if the user completed verification in this session
+            if (localStorage.getItem(config.verificationKey) === 'true') {
+                revealKey();
+                return true;
+            }
+            return false;
+        }
+
+        // Get a random key from the predefined keys
+        function getRandomKey() {
+            // Get a random index from the keys array
+            const randomIndex = Math.floor(Math.random() * config.premiumKeys.length);
+            // Return the key at that index
+            return config.premiumKeys[randomIndex];
+        }
+
+        // Reveal the key and clean up
+        function revealKey() {
+            // Stop checking for verification if interval is running
+            if (verificationInterval) {
+                clearInterval(verificationInterval);
+                verificationInterval = null;
+            }
+            
+            // Update UI
+            initialContent.style.display = 'none';
+            loadingSection.style.display = 'none';
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'block';
+            keyContainer.style.display = 'block';
+            
+            // Get a random key from the predefined keys
+            const selectedKey = getRandomKey();
+            keyValue.textContent = selectedKey;
+            
+            // Clear the verification flag
+            localStorage.removeItem(config.verificationKey);
+        }
+
+        // Show error message and reset UI
+        function showError() {
+            loadingSection.style.display = 'none';
+            errorMessage.style.display = 'block';
+            initialContent.style.display = 'block';
+            
+            // Stop checking for verification
+            if (verificationInterval) {
+                clearInterval(verificationInterval);
+                verificationInterval = null;
+            }
+        }
+
+        // Start checking for completion via localStorage
+        function startVerificationCheck() {
+            // First check if it's already done (in case verification happened very quickly)
+            if (localStorage.getItem(config.verificationKey) === 'true') {
+                revealKey();
+                return;
+            }
+            
+            // Set start time for verification
+            verificationStartTime = Date.now();
+            
+            // Show loading UI
+            initialContent.style.display = 'none';
+            loadingSection.style.display = 'block';
+            errorMessage.style.display = 'none';
+            
+            // Create a verification checker that runs at intervals
+            verificationInterval = setInterval(() => {
+                // Check if verification has been completed
+                if (localStorage.getItem(config.verificationKey) === 'true') {
+                    revealKey();
+                } else {
+                    // Check if max wait time has been exceeded
+                    const elapsed = Date.now() - verificationStartTime;
+                    if (elapsed > config.maxWaitTime) {
+                        showError();
+                    }
+                }
+            }, config.checkInterval);
+        }
+
+        // Handle the "Get Key" button click
+        getKeyBtn.addEventListener('click', function() {
+            // Clear any previous verification flag to prevent false positives
+            localStorage.removeItem(config.verificationKey);
+            
+            // Open Linkvertise in a new tab
+            window.open(config.linkvertiseUrl, '_blank');
+            
+            // Start checking for verification
+            startVerificationCheck();
+        });
+
+        // Handle the "Copy Key" button click
+        copyKeyBtn.addEventListener('click', function() {
+            const keyText = keyValue.textContent;
+            navigator.clipboard.writeText(keyText).then(function() {
+                const originalText = copyKeyBtn.innerHTML;
+                copyKeyBtn.innerHTML = 'Copied!';
+                
+                setTimeout(function() {
+                    copyKeyBtn.innerHTML = originalText;
+                }, 2000);
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // When page loads, clear any previous verification
+            localStorage.removeItem(config.verificationKey);
+            
+            // Always start fresh on page load
+            initialContent.style.display = 'block';
+            loadingSection.style.display = 'none';
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            keyContainer.style.display = 'none';
+            
+            // Check for verification status in the current session only
+            checkVerificationStatus();
+        });
+
+        // Additional check when the tab gets focus
+        window.addEventListener('focus', function() {
+            // If verification is in progress, check immediately upon focus
+            if (verificationInterval) {
+                if (localStorage.getItem(config.verificationKey) === 'true') {
+                    revealKey();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

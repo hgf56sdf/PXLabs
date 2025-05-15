@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PXLabs - Reviews</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #5865F2;
+            --secondary-purple: #9C59D8;
+            --dark-bg: #0C0C0C;
+            --dark-secondary: #1A1A1A;
+            --dark-accent: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* RTL Support */
+        [dir="rtl"] {
+            direction: rtl;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .lang-toggle {
+            background: var(--dark-accent);
+            border: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle:hover {
+            background: var(--primary-blue);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Reviews Grid */
+        .reviews-grid {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .review-card {
+            background: var(--dark-secondary);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid transparent;
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: calc(0.1s * var(--card-index));
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .review-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .review-image {
+  width: 520px;
+  height: 120px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover .review-image {
+            transform: scale(1.05);
+        }
+
+        .review-content {
+            padding: 1.5rem;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .review-author-info h4 {
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .review-rating {
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+
+        .review-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: bold;
+        }
+
+        .review-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-secondary);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--dark-accent);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark-secondary);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--text-primary);
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                flex-wrap: wrap;
+            }
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">PXLabs</div>
+            <button class="mobile-menu" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+<li><a href="../index.html" data-en="Home" data-ar="الرئيسية">Home</a></li>
+<li><a href="tools.html" data-en="Tools" data-ar="الأدوات">Tools</a></li>
+<li><a href="tutorials.html" data-en="YouTube Tutorials" data-ar="دروس اليوتيوب">YouTube Tutorials</a></li>
+<li><a href="updates.html" data-en="Updates" data-ar="التحديثات">Updates</a></li>
+<li><a href="premium.html" data-en="Premium" data-ar="البريميوم">Premium</a></li>
+
+            </ul>
+            <button class="lang-toggle" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i> <span id="currentLang">EN</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 data-en="Customer Reviews" data-ar="تقييمات العملاء">Customer Reviews</h1>
+            <p data-en="See what our community members are saying about PXLabs tools and services. Real feedback from real users." data-ar="اطلع على ما يقوله أعضاء مجتمعنا حول أدوات وخدمات بكسل لابز. ملاحظات حقيقية من مستخدمين حقيقيين.">See what our community members are saying about PXLabs tools and services. Real feedback from real users.</p>
+        </section>
+
+        <section class="reviews-grid" id="reviewsGrid">
+            <!-- Reviews will be generated by JavaScript -->
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 PXLabs. <span data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p>
+    </footer>
+
+    <script>
+        // Reviews Data (Placeholder)
+        const reviews = [
+            {
+                id: 1,
+                title: "BO6 Extra Aim Assist",
+                rating: 5,
+                image: "/Images/r1.png",
+                initials: "PX"
+            },
+            {
+                id: 2,
+                title: "BO6 Extra Aim Assist",
+                rating: 5,
+                image: "/Images/r2.png",
+                initials: "PX"
+            },
+            {
+                id: 3,
+                title: "BO6 Extra Aim Assist",
+                rating: 5,
+                image: "/Images/r3.png",
+                initials: "PX"
+            },
+            {
+                id: 4,
+                title: "BO6 Extra Aim Assist",
+                rating: 5,
+                image: "/Images/r4.png",
+                initials: "PX"
+            }
+        ];
+
+        // Language Toggle Functionality
+        let currentLanguage = 'en';
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+            document.getElementById('currentLang').textContent = currentLanguage.toUpperCase();
+            
+            // Update HTML dir attribute for RTL support
+            document.documentElement.setAttribute('dir', currentLanguage === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', currentLanguage);
+            
+            // Update all text elements with translation
+            const textElements = document.querySelectorAll('[data-en][data-ar]');
+            textElements.forEach(element => {
+                element.textContent = element.getAttribute(`data-${currentLanguage}`);
+            });
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Page Navigation
+        function navigateToPage(page) {
+            // Prevent default link behavior
+            event.preventDefault();
+            
+            // Add smooth transition effect
+            document.body.style.opacity = '0.8';
+            setTimeout(() => {
+                // Here you would normally navigate to the actual page
+                // For demonstration, we'll show an alert
+                alert(`Navigating to ${page} page...`);
+                
+                // Reset opacity
+                document.body.style.opacity = '1';
+            }, 300);
+        }
+
+        // Generate Review Cards
+        function generateReviewCards() {
+            const reviewsGrid = document.getElementById('reviewsGrid');
+            
+            reviews.forEach((review, index) => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+                reviewCard.style.setProperty('--card-index', index + 1);
+                
+                // Generate star rating
+                let stars = '';
+                for (let i = 0; i < 5; i++) {
+                    if (i < review.rating) {
+                        stars += '<i class="fas fa-star"></i>';
+                    } else {
+                        stars += '<i class="far fa-star"></i>';
+                    }
+                }
+                
+                reviewCard.innerHTML = `
+                    <img src="${review.image}" alt="Review thumbnail" class="review-image">
+                    <div class="review-content">
+                        <div class="review-header">
+                            <div class="review-author-avatar">${review.initials}</div>
+          <div class="review-author-info">
+    <div class="review-rating">${stars}</div>
+</div>
+                        </div>
+                        <h3 class="review-title">${review.title}</h3>
+                    </div>
+                `;
+                
+                reviewsGrid.appendChild(reviewCard);
+            });
+        }
+
+        // Initialize Reviews when page loads
+        window.addEventListener('load', () => {
+            generateReviewCards();
+        });
+
+        // Smooth Animations on Scroll
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.review-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                if (cardTop < window.innerHeight * 0.9) {
+                    card.style.animation = `fadeInUp 0.5s ease forwards ${card.style.getPropertyValue('--card-index') * 0.1}s`;
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const navLinks = document.getElementById('navLinks');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            if (!navLinks.contains(e.target) && !mobileMenu.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Add hover effect animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const reviewCards = document.querySelectorAll('.review-card');
+            
+            reviewCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

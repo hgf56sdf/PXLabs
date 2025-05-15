@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PXLabs - Discord server for developers, designers, and creators">
+    <title>PXLabs - Discord Community</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <style>
+        /* ============================================
+           CSS Variables & Reset
+        ============================================ */
+        :root {
+            --primary-blue: #5865F2;
+            --secondary-purple: #9C59D8;
+            --dark-bg: #0C0C0C;
+            --dark-secondary: #1A1A1A;
+            --dark-accent: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --max-width: 1200px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --border-radius: 0.5rem;
+            --transition-fast: 0.2s ease;
+            --transition-slow: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        [dir="rtl"] {
+            direction: rtl;
+        }
+
+        /* ============================================
+           Typography
+        ============================================ */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           Layout Containers
+        ============================================ */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--spacing-sm);
+        }
+
+        /* ============================================
+           Header & Navigation
+        ============================================ */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--dark-accent);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: var(--spacing-md);
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .lang-toggle {
+            background: var(--dark-accent);
+            border: none;
+            color: var(--text-primary);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.9rem;
+        }
+
+        .lang-toggle:hover {
+            background: var(--primary-blue);
+        }
+
+        /* ============================================
+           Main Content
+        ============================================ */
+        main {
+            margin-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           Hero Section
+        ============================================ */
+        .hero {
+            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-sm);
+        }
+
+        .hero h1 {
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto var(--spacing-lg) auto;
+            line-height: 1.8;
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: var(--primary-blue);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        .discord-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .discord-btn:hover::before {
+            left: 100%;
+        }
+
+        /* ============================================
+           Navigation Grid
+        ============================================ */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            padding: var(--spacing-xl) var(--spacing-sm);
+        }
+
+        .nav-card {
+            background: var(--dark-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-blue);
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            transition: width var(--transition-slow);
+        }
+
+        .nav-card:hover::before {
+            width: 100%;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           Footer
+        ============================================ */
+        footer {
+            background: var(--dark-secondary);
+            padding: var(--spacing-lg) 0;
+            text-align: center;
+            border-top: 1px solid var(--dark-accent);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           Animations
+        ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           Mobile Menu
+        ============================================ */
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* ============================================
+           Responsive Design
+        ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark-secondary);
+                flex-direction: column;
+                padding: var(--spacing-sm);
+                border-bottom: 1px solid var(--dark-accent);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           Utility Classes
+        ============================================ */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         Header Section
+    ============================================ -->
+    <header>
+        <nav class="container">
+            <div class="logo">PXLabs</div>
+            <button class="mobile-menu" onclick="toggleMenu()" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+ <li><a href="Pages/reviews.html" data-translate="nav-reviews">Reviews</a></li>
+<li><a href="Pages/tools.html" data-translate="nav-tools">Tools</a></li>
+<li><a href="Pages/tutorials.html" data-translate="nav-tutorials">YouTube Tutorials</a></li>
+<li><a href="Pages/updates.html" data-translate="nav-updates">Updates</a></li>
+<li><a href="Pages/premium.html" data-translate="nav-premium">Premium</a></li>
+
+            </ul>
+            <button class="lang-toggle" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i> <span id="currentLang">EN</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ============================================
+         Main Content
+    ============================================ -->
+    <main>
+        <section class="hero container fade-in">
+            <h1 data-translate="hero-title">Welcome to PXLabs</h1>
+            <p data-translate="hero-desc">Join our Discord community for our tools, tutorials, and exclusive content.</p>
+            <a href="https://discord.gg/b6hy72xTMv" class="discord-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-discord"></i>
+                <span data-translate="discord-join">Join Discord Server</span>
+            </a>
+        </section>
+
+        <section class="nav-grid container">
+            <a href="#" class="nav-card fade-in" onclick="navigate(event, 'reviews')">
+                <div class="card-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="card-title" data-translate="card-reviews-title">Reviews</h3>
+                <p class="card-desc" data-translate="card-reviews-desc">See what our community members are saying</p>
+            </a>
+
+            <a href="#" class="nav-card fade-in" onclick="navigate(event, 'tools')">
+                <div class="card-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3 class="card-title" data-translate="card-tools-title">Tools</h3>
+                <p class="card-desc" data-translate="card-tools-desc">Explore our collection of useful tools and utilities</p>
+            </a>
+
+            <a href="#" class="nav-card fade-in" onclick="navigate(event, 'tutorials')">
+                <div class="card-icon">
+                    <i class="fab fa-youtube"></i>
+                </div>
+                <h3 class="card-title" data-translate="card-tutorials-title">YouTube Tutorials</h3>
+                <p class="card-desc" data-translate="card-tutorials-desc">Step-by-step guides and video tutorials</p>
+            </a>
+
+            <a href="#" class="nav-card fade-in" onclick="navigate(event, 'updates')">
+                <div class="card-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h3 class="card-title" data-translate="card-updates-title">Updates</h3>
+                <p class="card-desc" data-translate="card-updates-desc">Stay informed about the latest changes and features</p>
+            </a>
+
+            <a href="#" class="nav-card fade-in" onclick="navigate(event, 'premium')">
+                <div class="card-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3 class="card-title" data-translate="card-premium-title">Premium</h3>
+                <p class="card-desc" data-translate="card-premium-desc">Unlock exclusive features and benefits</p>
+            </a>
+        </section>
+    </main>
+
+    <!-- ============================================
+         Footer Section
+    ============================================ -->
+    <footer>
+        <div class="container">
+            <p>© 2025 PXLabs. <span data-translate="footer-rights">All rights reserved.</span></p>
+        </div>
+    </footer>
+
+    <script>
+        /* ============================================
+           Translation Data
+        ============================================ */
+        const translations = {
+            en: {
+                'nav-reviews': 'Reviews',
+                'nav-tools': 'Tools',
+                'nav-tutorials': 'YouTube Tutorials',
+                'nav-updates': 'Updates',
+                'nav-premium': 'Premium',
+                'hero-title': 'Welcome to PXLabs',
+                'hero-desc': 'Join our Discord community for cutting-edge tools, tutorials, and exclusive content. Connect with developers, designers, and creators alike.',
+                'discord-join': 'Join Discord Server',
+                'card-reviews-title': 'Reviews',
+                'card-reviews-desc': 'See what our community members are saying',
+                'card-tools-title': 'Tools',
+                'card-tools-desc': 'Explore our collection of useful tools and utilities',
+                'card-tutorials-title': 'YouTube Tutorials',
+                'card-tutorials-desc': 'Step-by-step guides and video tutorials',
+                'card-updates-title': 'Updates',
+                'card-updates-desc': 'Stay informed about the latest changes and features',
+                'card-premium-title': 'Premium',
+                'card-premium-desc': 'Unlock exclusive features and benefits',
+                'footer-rights': 'All rights reserved.'
+            },
+            ar: {
+                'nav-reviews': 'التقييمات',
+                'nav-tools': 'الأدوات',
+                'nav-tutorials': 'شروحات اليوتيوب',
+                'nav-updates': 'التحديثات',
+                'nav-premium': 'البريميوم',
+                'hero-title': 'حياكم في PXLabs',
+                'hero-desc': 'انضم إلى مجتمع الديسكورد الخاص بنا للحصول على أدوات .',
+                'discord-join': 'انضم إلى سيرفر الديسكورد',
+                'card-reviews-title': 'التقييمات',
+                'card-reviews-desc': 'شوف على ما يقوله أعضاء مجتمعنا',
+                'card-tools-title': 'الأدوات',
+                'card-tools-desc': 'اكتشف مجموعتنا من الأدوات والمرافق المفيدة',
+                'card-tutorials-title': 'شروح اليوتيوب',
+                'card-tutorials-desc': 'أدلة تفصيلية شروح فيديو',
+                'card-updates-title': 'التحديثات',
+                'card-updates-desc': 'ابق على اطلاع بأحدث التغييرات والميزات',
+                'card-premium-title': 'البريميوم',
+                'card-premium-desc': 'افتح الميزات والفوائد الحصرية',
+                'footer-rights': 'جميع الحقوق محفوظة.'
+            }
+        };
+
+        /* ============================================
+           Global State
+        ============================================ */
+        let currentLang = 'en';
+
+        /* ============================================
+           Utility Functions
+        ============================================ */
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        /* ============================================
+           Language Toggle
+        ============================================ */
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.getElementById('currentLang').textContent = currentLang.toUpperCase();
+            document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', currentLang);
+            
+            // Update all translated elements
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+        }
+
+        /* ============================================
+           Mobile Menu Toggle
+        ============================================ */
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        /* ============================================
+           Page Navigation
+        ============================================ */
+        function navigate(event, page) {
+            event.preventDefault();
+            // Add page transition effect
+            document.body.style.opacity = '0.9';
+            setTimeout(() => {
+                // Navigate to page (simulated for demo)
+                console.log('Navigating to:', page);
+                document.body.style.opacity = '1';
+            }, 200);
+        }
+
+        /* ============================================
+           Intersection Observer for Animations
+        ============================================ */
+        function initAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '50px'
+            });
+
+            document.querySelectorAll('.fade-in').forEach((element, index) => {
+                element.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(element);
+            });
+        }
+
+        /* ============================================
+           Event Listeners
+        ============================================ */
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimations();
+            
+            // Close mobile menu on outside click
+            document.addEventListener('click', (e) => {
+                const navLinks = document.getElementById('navLinks');
+                const mobileMenu = document.querySelector('.mobile-menu');
+                
+                if (!navLinks.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Handle window resize for mobile menu
+        window.addEventListener('resize', debounce(() => {
+            if (window.innerWidth > 768) {
+                document.getElementById('navLinks').classList.remove('active');
+            }
+        }, 250));
+    </script>
+</body>
+</html>

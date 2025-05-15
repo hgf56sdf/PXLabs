@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PXLabs Tools - Advanced utilities for gamers and creators">
+  <title>PXLabs - Tools</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+  <style>
+    /* CSS: Variables, Reset, Layout, Styles omitted for brevity but unchanged */
+        :root {            --primary-blue: #5865F2;
+            --secondary-purple: #9C59D8;            --dark-bg: #0C0C0C;
+            --dark-secondary: #1A1A1A;            --dark-accent: #2A2A2A;
+            --text-primary: #FFFFFF;            --text-secondary: #B0B0B0;
+            --spacing-xs: 0.5rem;            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;            --spacing-lg: 1.5rem;
+            --spacing-xl: 2.5rem;            --transition-fast: 0.2s ease;
+            --transition-medium: 0.3s ease;            --border-radius-sm: 8px;
+            --border-radius-md: 12px;            --border-radius-lg: 20px;
+        }
+        * {            margin: 0;
+            padding: 0;            box-sizing: border-box;
+        }
+        body {            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--dark-bg);            color: var(--text-primary);
+            line-height: 1.6;            overflow-x: hidden;
+        }
+        .container {            width: 90%;
+            max-width: 1200px;            margin: 0 auto;
+            padding: var(--spacing-md) 0;        }
+        /* ============================================
+           Header & Navigation        ============================================ */
+        header {            background-color: var(--dark-secondary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);            position: sticky;
+            top: 0;            z-index: 100;
+        }
+        nav {            display: flex;
+            justify-content: space-between;            align-items: center;
+            padding: var(--spacing-md) var(--spacing-lg);        }
+        .logo {
+            font-size: 1.5rem;            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;            background-clip: text;
+        }
+        .nav-links {            display: flex;
+            list-style: none;            gap: var(--spacing-md);
+        }
+        .nav-links a {            color: var(--text-secondary);
+            text-decoration: none;            transition: color var(--transition-fast);
+            font-size: 0.95rem;        }
+        .nav-links a:hover {
+            color: var(--text-primary);        }
+        .lang-toggle {
+            background: var(--dark-accent);            border: none;
+            color: var(--text-primary);            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;            cursor: pointer;
+            transition: all var(--transition-fast);            font-size: 0.9rem;
+        }
+        .lang-toggle:hover {            background: var(--primary-blue);
+        }
+        .mobile-menu {            display: none;
+            background: none;            border: none;
+            color: var(--text-primary);            font-size: 1.2rem;
+            cursor: pointer;        }
+        /* ============================================
+           Hero Section        ============================================ */
+        .hero {            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-md);            margin-bottom: var(--spacing-lg);
+        }
+        .hero h1 {            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;            -webkit-text-fill-color: transparent;
+            background-clip: text;        }
+        .hero p {
+            max-width: 700px;            margin: 0 auto;
+            color: var(--text-secondary);            font-size: 1.1rem;
+            margin-bottom: var(--spacing-lg);        }
+        /* ============================================
+           Tools Grid        ============================================ */
+        .tools-grid {            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));            gap: var(--spacing-lg);
+            padding: var(--spacing-md);        }
+        .tool-card {
+            background: var(--dark-secondary);            border-radius: var(--border-radius-md);
+            overflow: hidden;            transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+            display: flex;            flex-direction: column;
+            height: 100%;            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;        }
+        .tool-card:hover {
+            transform: translateY(-5px);            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .tool-card-content {            padding: var(--spacing-lg);
+            flex-grow: 1;            display: flex;
+            flex-direction: column;        }
+        .tool-icon {
+            font-size: 2.5rem;            margin-bottom: var(--spacing-md);
+            color: var(--primary-blue);            text-align: center;
+        }
+        .tool-title {            font-size: 1.5rem;
+            margin-bottom: var(--spacing-sm);            font-weight: 600;
+        }
+        .tool-desc {            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);            flex-grow: 1;
+        }
+        .discord-btn {            display: inline-flex;
+            align-items: center;            justify-content: center;
+            gap: var(--spacing-xs);            background: var(--primary-blue);
+            color: white;            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: var(--border-radius-lg);            text-decoration: none;
+            font-weight: 600;            transition: all var(--transition-fast);
+            position: relative;            overflow: hidden;
+            border: none;            cursor: pointer;
+            width: 100%;        }
+        .discord-btn:hover {
+            transform: translateY(-2px);            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+        .discord-btn::before {            content: '';
+            position: absolute;            top: 0;
+            left: -100%;            width: 100%;
+            height: 100%;            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;        }
+        .discord-btn:hover::before {
+            left: 100%;        }
+        /* Featured Tool (Randex) */
+        .featured-tool {            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(88, 101, 242, 0.1), rgba(156, 89, 216, 0.1));            border: 1px solid rgba(156, 89, 216, 0.3);
+            animation-delay: 0.1s;        }
+        .featured-tool .tool-icon {
+            font-size: 3rem;            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;            -webkit-text-fill-color: transparent;
+            background-clip: text;        }
+        .featured-tool .tool-title {
+            font-size: 2rem;            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text;            -webkit-text-fill-color: transparent;
+            background-clip: text;        }
+        .coming-soon-badge {
+            display: inline-block;            background: var(--secondary-purple);
+            color: white;            padding: 0.25rem 0.75rem;
+            border-radius: var(--border-radius-sm);            font-size: 0.8rem;
+            margin-left: var(--spacing-xs);            vertical-align: middle;
+        }
+        /* ============================================           Footer
+        ============================================ */        footer {
+            background-color: var(--dark-secondary);            text-align: center;
+            padding: var(--spacing-lg);            margin-top: var(--spacing-xl);
+            color: var(--text-secondary);        }
+        /* ============================================
+           Animations        ============================================ */
+        @keyframes fadeInUp {            from {
+                opacity: 0;                transform: translateY(20px);
+            }            to {
+                opacity: 1;                transform: translateY(0);
+            }        }
+        /* ============================================
+           Responsive Design        ============================================ */
+        @media (max-width: 768px) {            .mobile-menu {
+                display: block;            }
+            .nav-links {
+                position: fixed;                top: 60px;
+                left: 0;                right: 0;
+                background-color: var(--dark-secondary);                flex-direction: column;
+                align-items: center;                padding: var(--spacing-md);
+                gap: var(--spacing-md);                transform: translateY(-100%);
+                opacity: 0;                transition: all var(--transition-medium);
+                z-index: 99;            }
+            .nav-links.active {
+                transform: translateY(0);                opacity: 1;
+            }
+            .hero h1 {                font-size: 2rem;
+            }
+            .hero p {                font-size: 1rem;
+            }
+            .tools-grid {                grid-template-columns: 1fr;
+            }        }
+        [dir="rtl"] .discord-btn::before {
+            left: auto;            right: -100%;
+        }
+        [dir="rtl"] .discord-btn:hover::before {            left: auto;
+            right: 100%;        }
+    </style></head>
+ </style>
+</head>
+<body>
+  <!-- ============================================
+       Header Section
+  ============================================ -->
+  <header>
+    <nav>
+      <div class="logo">PXLabs</div>
+      <button class="mobile-menu" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" data-en="Home" data-ar="الرئيسية">Home</a></li>
+        <li><a href="reviews.html" data-en="Reviews" data-ar="التقييمات">Reviews</a></li>
+        <li><a href="tutorials.html" data-en="YouTube Tutorials" data-ar="دروس اليوتيوب">YouTube Tutorials</a></li>
+        <li><a href="updates.html" data-en="Updates" data-ar="التحديثات">Updates</a></li>
+        <li><a href="premium.html" data-en="Premium" data-ar="البريميوم">Premium</a></li>
+      </ul>
+      <button class="lang-toggle" onclick="toggleLanguage()">
+        <i class="fas fa-language"></i> <span id="currentLang">EN</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ============================================
+       Main Content
+  ============================================ -->
+  <main>
+    <section class="hero">
+      <h1 data-en="PXLabs Tools" data-ar="أدوات PXLabs">PXLabs Tools</h1>
+      <p data-en="Discover our collection of powerful tools designed to enhance your gaming experience. From aim assistance to macro utilities, we've got you covered." data-ar="اكتشف مجموعتنا من الأدوات القوية المصممة لتحسين تجربة الألعاب الخاصة بك. من المساعدة في التصويب إلى أدوات الماكرو، لدينا كل ما تحتاجه.">
+        Discover our collection of powerful tools designed to enhance your gaming experience. From aim assistance to macro utilities, we've got you covered.
+      </p>
+    </section>
+
+    <section class="tools-grid container">
+      <!-- Featured Tool (Randex) -->
+      <div class="tool-card featured-tool">
+        <div class="tool-card-content">
+          <div class="tool-icon">
+            <i class="fas fa-cube"></i>
+          </div>
+          <h3 class="tool-title" data-en="Randex" data-ar="راندكس">
+            Randex <span class="coming-soon-badge" data-en="COMING SOON" data-ar="قريبًا">COMING SOON</span>
+          </h3>
+          <p class="tool-desc" data-en="An all-in-one tool that will combine all existing PXLabs utilities into one seamless experience." data-ar="أداة شاملة ستجمع جميع أدوات بكسل لابز الحالية في تجربة واحدة سلسة.">
+            An all-in-one tool that will combine all existing PXLabs utilities into one seamless experience.
+          </p>
+        </div>
+      </div>
+
+      <!-- MW3 Extra Aim Assist -->
+      <div class="tool-card">
+        <div class="tool-card-content">
+          <div class="tool-icon">
+            <i class="fas fa-crosshairs"></i>
+          </div>
+          <h3 class="tool-title" data-en="MW3 Extra Aim Assist" data-ar="مساعد التصويب الإضافي MW3">MW3 Extra Aim Assist</h3>
+          <p class="tool-desc" data-en="Optimized targeting for MW3. Reliable and simple." data-ar="استهداف محسّن لـ MW3. موثوق وبسيط.">
+            Optimized targeting for MW3. Reliable and simple.
+          </p>
+          <a href="https://discord.gg/b6hy72xTMv" class="discord-btn" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-discord"></i>
+            <span data-en="Join Discord to Download" data-ar="انضم إلى ديسكورد للتحميل">Join Discord to Download</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- COD YY Macro -->
+      <div class="tool-card">
+        <div class="tool-card-content">
+          <div class="tool-icon">
+            <i class="fas fa-keyboard"></i>
+          </div>
+          <h3 class="tool-title" data-en="COD YY Macro" data-ar="ماكرو YY كود">COD YY Macro</h3>
+          <p class="tool-desc" data-en="Achieve smooth YY movement macros for any COD title." data-ar="احصل على حركات YY سلسة لأي عنوان من سلسلة كول أوف ديوتي.">
+            Achieve smooth YY movement macros for any COD title.
+          </p>
+          <a href="https://discord.gg/b6hy72xTMv" class="discord-btn" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-discord"></i>
+            <span data-en="Join Discord to Download" data-ar="انضم إلى ديسكورد للتحميل">Join Discord to Download</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- BO6 Extra Aim Assist -->
+      <div class="tool-card">
+        <div class="tool-card-content">
+          <div class="tool-icon">
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <h3 class="tool-title" data-en="BO6 Extra Aim Assist" data-ar="مساعد التصويب الإضافي BO6">BO6 Extra Aim Assist</h3>
+          <p class="tool-desc" data-en="Advanced aim boosting for BO6 — fine-tuned for realism and control." data-ar="تعزيز متقدم للتصويب في BO6 - مضبوط بدقة للواقعية والتحكم.">
+            Advanced aim boosting for BO6 — fine-tuned for realism and control.
+          </p>
+          <a href="https://discord.gg/b6hy72xTMv" class="discord-btn" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-discord"></i>
+            <span data-en="Join Discord to Download" data-ar="انضم إلى ديسكورد للتحميل">Join Discord to Download</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================
+       Footer Section
+  ============================================ -->
+  <footer>
+    <p>© 2025 PXLabs. <span data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p>
+  </footer>
+
+  <script>
+    // Language Toggle
+    let currentLanguage = 'en';
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+      document.getElementById('currentLang').textContent = currentLanguage.toUpperCase();
+      document.documentElement.setAttribute('dir', currentLanguage === 'ar' ? 'rtl' : 'ltr');
+      document.documentElement.setAttribute('lang', currentLanguage);
+
+      document.querySelectorAll('[data-en][data-ar]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${currentLanguage}`);
+      });
+    }
+
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+
+    // On Page Load
+    document.addEventListener('DOMContentLoaded', () => {
+      const toolCards = document.querySelectorAll('.tool-card');
+      toolCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+      });
+
+      document.addEventListener('click', (e) => {
+        const navLinks = document.getElementById('navLinks');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        if (!navLinks.contains(e.target) && !mobileMenu.contains(e.target)) {
+          navLinks.classList.remove('active');
+        }
+      });
+    });
+
+    // Responsive Reset on Resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        document.getElementById('navLinks').classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
