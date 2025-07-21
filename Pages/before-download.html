@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PXLabs Key Generator - Get your access key for premium tools">
+  <title>PXLabs - Key Generator</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+  <style>
+    :root {
+      --primary-blue: #5865F2;
+      --secondary-purple: #9C59D8;
+      --success-green: #00D26A;
+      --warning-orange: #FAA61A;
+      --error-red: #ED4245;
+      --dark-bg: #0C0C0C;
+      --dark-secondary: #1A1A1A;
+      --dark-accent: #2A2A2A;
+      --text-primary: #FFFFFF;
+      --text-secondary: #B0B0B0;
+      --spacing-xs: 0.5rem;
+      --spacing-sm: 0.75rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2.5rem;
+      --transition-fast: 0.2s ease;
+      --transition-medium: 0.3s ease;
+      --border-radius-sm: 8px;
+      --border-radius-md: 12px;
+      --border-radius-lg: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: var(--spacing-md) 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Header */
+    header {
+      background-color: var(--dark-secondary);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Main Content */
+    .hero {
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+      margin-top: 80px;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-md);
+      background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    /* Key Generator Card */
+    .key-generator {
+      background: var(--dark-secondary);
+      border-radius: var(--border-radius-md);
+      padding: var(--spacing-xl);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    /* Status Section */
+    .status-section {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .status-message {
+      margin-bottom: var(--spacing-lg);
+      padding: var(--spacing-md);
+      border-radius: var(--border-radius-sm);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-xs);
+    }
+
+    .status-message.waiting {
+      background: rgba(250, 166, 26, 0.1);
+      color: var(--warning-orange);
+      border: 1px solid rgba(250, 166, 26, 0.3);
+    }
+
+    .status-message.success {
+      background: rgba(0, 210, 106, 0.1);
+      color: var(--success-green);
+      border: 1px solid rgba(0, 210, 106, 0.3);
+    }
+
+    .status-message.error {
+      background: rgba(237, 66, 69, 0.1);
+      color: var(--error-red);
+      border: 1px solid rgba(237, 66, 69, 0.3);
+    }
+
+    /* Key Display Section */
+    .key-display {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .key-display.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .key-container {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .key-input {
+      flex: 1;
+      background: var(--dark-bg);
+      border: 2px solid var(--success-green);
+      border-radius: var(--border-radius-sm);
+      padding: var(--spacing-md);
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 2px;
+      outline: none;
+      user-select: all;
+    }
+
+    .copy-btn {
+      background: var(--primary-blue);
+      border: none;
+      color: white;
+      padding: var(--spacing-md);
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      min-width: 100px;
+      font-weight: 600;
+    }
+
+    .copy-btn:hover {
+      background: var(--secondary-purple);
+      transform: translateY(-2px);
+    }
+
+    .copy-btn.copied {
+      background: var(--success-green);
+    }
+
+    /* Download Button */
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-xs);
+      background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+      color: white;
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-radius: var(--border-radius-lg);
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+    }
+
+    .download-section {
+      text-align: center;
+      margin-top: var(--spacing-lg);
+    }
+
+    /* Animations */
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .fa-spin {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .key-generator {
+        padding: var(--spacing-lg);
+      }
+      
+      .key-container {
+        flex-direction: column;
+      }
+      
+      .copy-btn {
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">PXLabs Key Generator</div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="container">
+      <div class="hero">
+        <h1>Access Key Generator</h1>
+        <p>Complete Linkvertise verification to generate your access key</p>
+      </div>
+
+      <div class="key-generator">
+        <!-- Status Section -->
+        <div class="status-section">
+          <div class="status-message waiting" id="statusMessage">
+            <i class="fas fa-spinner fa-spin"></i>
+            Waiting for API...
+          </div>
+        </div>
+
+        <!-- Key Display Section -->
+        <div class="key-display" id="keyDisplay">
+          <p style="margin-bottom: var(--spacing-md); color: var(--text-secondary);">
+            Your access key has been generated successfully!
+          </p>
+          <div class="key-container">
+            <input type="text" class="key-input" id="keyInput" readonly>
+            <button class="copy-btn" id="copyBtn">
+              <i class="fas fa-copy"></i>
+              Copy
+            </button>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--spacing-lg);">
+            Use this key to download
+          </p>
+          
+          <!-- Download Button -->
+          <div class="download-section">
+            <button class="download-btn" id="downloadBtn">
+              <i class="fas fa-download"></i>
+              Go to Download Page
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Generate 50 random keys
+    const keys = [
+      'PXL-A7K9-M3N8-Q2W5', 'PXL-B6H4-L9J2-R8T1', 'PXL-C5G3-K8I7-S9U6',
+      'PXL-D4F2-J7H6-T0P5', 'PXL-E3E1-I6G5-U1Q4', 'PXL-F2D9-H5F4-V2R3',
+      'PXL-G1C8-G4E3-W3S2', 'PXL-H0B7-F3D2-X4T1', 'PXL-I9A6-E2C1-Y5U0',
+      'PXL-J8Z5-D1B0-Z6V9', 'PXL-K7Y4-C0A9-A7W8', 'PXL-L6X3-B9Z8-B8X7',
+      'PXL-M5W2-A8Y7-C9Y6', 'PXL-N4V1-Z7X6-D0Z5', 'PXL-O3U0-Y6W5-E1A4',
+      'PXL-P2T9-X5V4-F2B3', 'PXL-Q1S8-W4U3-G3C2', 'PXL-R0R7-V3T2-H4D1',
+      'PXL-S9Q6-U2S1-I5E0', 'PXL-T8P5-T1R0-J6F9', 'PXL-U7O4-S0Q9-K7G8',
+      'PXL-V6N3-R9P8-L8H7', 'PXL-W5M2-Q8O7-M9I6', 'PXL-X4L1-P7N6-N0J5',
+      'PXL-Y3K0-O6M5-O1K4', 'PXL-Z2J9-N5L4-P2L3', 'PXL-A1I8-M4K3-Q3M2',
+      'PXL-B0H7-L3J2-R4N1', 'PXL-C9G6-K2I1-S5O0', 'PXL-D8F5-J1H0-T6P9',
+      'PXL-E7E4-I0G9-U7Q8', 'PXL-F6D3-H9F8-V8R7', 'PXL-G5C2-G8E7-W9S6',
+      'PXL-H4B1-F7D6-X0T5', 'PXL-I3A0-E6C5-Y1U4', 'PXL-J2Z9-D5B4-Z2V3',
+      'PXL-K1Y8-C4A3-A3W2', 'PXL-L0X7-B3Z2-B4X1', 'PXL-M9W6-A2Y1-C5Y0',
+      'PXL-N8V5-Z1X0-D6Z9', 'PXL-O7U4-Y0W9-E7A8', 'PXL-P6T3-X9V8-F8B7',
+      'PXL-Q5S2-W8U7-G9C6', 'PXL-R4R1-V7T6-H0D5', 'PXL-S3Q0-U6S5-I1E4',
+      'PXL-T2P9-T5R4-J2F3', 'PXL-U1O8-S4Q3-K3G2', 'PXL-V0N7-R3P2-L4H1',
+      'PXL-W9M6-Q2O1-M5I0', 'PXL-X8L5-P1N0-N6J9', 'PXL-Y7K4-O0M9-O7K8',
+      'PXL-Z6J3-N9L8-P8L7'
+    ];
+
+    // Configuration
+    const CONFIG = {
+      CHECK_INTERVAL: 2000, // Check every 2 seconds
+      LINKVERTISE_DOMAINS: ['linkvertise.com', 'link-to.net', 'link-hub.net', 'file-link.net']
+    };
+
+    // State
+    let keyGenerated = false;
+    let checkInterval = null;
+
+    // Elements
+    const statusMessage = document.getElementById('statusMessage');
+    const keyDisplay = document.getElementById('keyDisplay');
+    const keyInput = document.getElementById('keyInput');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    // Check for Linkvertise tab
+    function checkForLinkvertiseTabs() {
+      return new Promise((resolve) => {
+        // Check if we can access other tabs (this will only work in specific browser contexts)
+        try {
+          // Try to detect Linkvertise through various methods
+          let foundLinkvertise = false;
+
+          // Method 1: Check document referrer
+          if (document.referrer) {
+            const referrerHost = new URL(document.referrer).hostname.toLowerCase();
+            foundLinkvertise = CONFIG.LINKVERTISE_DOMAINS.some(domain => 
+              referrerHost.includes(domain)
+            );
+          }
+
+          // Method 2: Check window.opener (if opened from Linkvertise)
+          if (window.opener && !foundLinkvertise) {
+            try {
+              const openerHost = window.opener.location.hostname.toLowerCase();
+              foundLinkvertise = CONFIG.LINKVERTISE_DOMAINS.some(domain => 
+                openerHost.includes(domain)
+              );
+            } catch (e) {
+              // Cross-origin restriction, but this could indicate Linkvertise
+              foundLinkvertise = true;
+            }
+          }
+
+          // Method 3: Check URL parameters that might indicate Linkvertise completion
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.has('linkvertise') || urlParams.has('verified') || urlParams.has('completed')) {
+            foundLinkvertise = true;
+          }
+
+          // Method 4: Check for Linkvertise-specific storage or cookies
+          try {
+            const hasLinkvertiseStorage = Object.keys(localStorage).some(key => 
+              key.toLowerCase().includes('linkvertise')
+            );
+            if (hasLinkvertiseStorage) {
+              foundLinkvertise = true;
+            }
+          } catch (e) {
+            // Storage access denied
+          }
+
+          // Method 5: Check if user has linkvertise.com in their browsing history (indirect)
+          // This is a fallback method that checks for common Linkvertise indicators
+          const currentUrl = window.location.href.toLowerCase();
+          if (currentUrl.includes('linkvertise') || currentUrl.includes('verified=true')) {
+            foundLinkvertise = true;
+          }
+
+          resolve(foundLinkvertise);
+        } catch (error) {
+          console.log('Tab check error:', error);
+          resolve(false);
+        }
+      });
+    }
+
+    // Generate and display key
+    function generateKey() {
+      if (keyGenerated) return;
+
+      keyGenerated = true;
+      
+      // Stop checking
+      if (checkInterval) {
+        clearInterval(checkInterval);
+        checkInterval = null;
+      }
+
+      // Update status
+      statusMessage.className = 'status-message success';
+      statusMessage.innerHTML = '<i class="fas fa-check-circle"></i> Linkvertise verification detected! Generating key...';
+
+      // Generate random key
+      const selectedKey = keys[Math.floor(Math.random() * keys.length)];
+      keyInput.value = selectedKey;
+
+      // Show key display with animation
+      setTimeout(() => {
+        keyDisplay.classList.add('visible');
+        statusMessage.innerHTML = '<i class="fas fa-check-circle"></i> Key generated successfully!';
+      }, 1000);
+    }
+
+    // Start monitoring for Linkvertise tabs
+    function startLinkvertiseCheck() {
+      if (checkInterval) return; // Already running
+
+      checkInterval = setInterval(async () => {
+        const hasLinkvertise = await checkForLinkvertiseTabs();
+        
+        if (hasLinkvertise) {
+          generateKey();
+        }
+      }, CONFIG.CHECK_INTERVAL);
+
+      // Also check immediately
+      setTimeout(async () => {
+        const hasLinkvertise = await checkForLinkvertiseTabs();
+        if (hasLinkvertise) {
+          generateKey();
+        }
+      }, 500);
+    }
+
+    // Copy functionality
+    copyBtn.addEventListener('click', function() {
+      keyInput.select();
+      keyInput.setSelectionRange(0, 99999);
+      
+      navigator.clipboard.writeText(keyInput.value).then(function() {
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        copyBtn.classList.add('copied');
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }).catch(function(err) {
+        document.execCommand('copy');
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        copyBtn.classList.add('copied');
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+
+    // Download button functionality
+    downloadBtn.addEventListener('click', function() {
+      // You can change this URL to your actual download page
+      window.location.href = 'final-download.html';
+      // Alternative: window.open('download.html', '_blank');
+    });
+
+    // Listen for messages from other windows (Linkvertise completion)
+    window.addEventListener('message', function(e) {
+      // Check if message is from a Linkvertise domain
+      const isFromLinkvertise = CONFIG.LINKVERTISE_DOMAINS.some(domain => 
+        e.origin.includes(domain)
+      );
+      
+      if (isFromLinkvertise || e.data === 'linkvertise_completed') {
+        generateKey();
+      }
+    });
+
+    // Handle window focus (when returning from Linkvertise)
+    window.addEventListener('focus', async function() {
+      if (!keyGenerated) {
+        const hasLinkvertise = await checkForLinkvertiseTabs();
+        if (hasLinkvertise) {
+          generateKey();
+        }
+      }
+    });
+
+    // Handle page visibility change
+    document.addEventListener('visibilitychange', async function() {
+      if (!document.hidden && !keyGenerated) {
+        setTimeout(async () => {
+          const hasLinkvertise = await checkForLinkvertiseTabs();
+          if (hasLinkvertise) {
+            generateKey();
+          }
+        }, 1000);
+      }
+    });
+
+    // Start checking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      startLinkvertiseCheck();
+      
+      // Auto-generate key after 5 seconds for demo purposes if user came from linkvertise
+      // Remove this in production or adjust the logic
+      setTimeout(() => {
+        if (!keyGenerated) {
+          console.log('Demo: Simulating Linkvertise detection...');
+          generateKey();
+        }
+      }, 5000);
+    });
+  </script>
+</body>
+</html>

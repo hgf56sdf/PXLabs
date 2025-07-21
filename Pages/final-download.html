@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PXLabs - Fortnite Optimization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Sophisticated Color Palette */
+      --color-bg: #0f0f14;
+      --color-surface: #1a1a22;
+      --color-surface-elevated: #242430;
+      --color-border: rgba(255, 255, 255, 0.08);
+      --color-border-hover: rgba(255, 255, 255, 0.16);
+      
+      /* Text Colors */
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #a1a1aa;
+      --color-text-tertiary: #71717a;
+      
+      /* Brand Colors */
+      --color-primary: #6366f1;
+      --color-primary-hover: #5855eb;
+      --color-accent: #8b5cf6;
+      --color-success: #22c55e;
+      --color-warning: #f59e0b;
+      --color-error: #ef4444;
+      
+      /* Gradients */
+      --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      --gradient-surface: linear-gradient(135deg, #1a1a22 0%, #242430 100%);
+      
+      /* Spacing Scale */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      --space-3xl: 4rem;
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1rem;
+      --text-lg: 1.125rem;
+      --text-xl: 1.25rem;
+      --text-2xl: 1.5rem;
+      --text-3xl: 1.875rem;
+      --text-4xl: 2.25rem;
+      
+      /* Border Radius */
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      font-size: var(--text-base);
+      min-height: 100vh;
+      padding: var(--space-lg);
+      
+      /* Subtle background pattern */
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+    }
+
+    .container {
+      max-width: 28rem;
+      margin: 0 auto;
+      padding-top: var(--space-2xl);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    .logo-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-lg);
+      color: white;
+      font-weight: 600;
+    }
+
+    .brand-name {
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.025em;
+    }
+
+    .tagline {
+      color: var(--color-text-secondary);
+      font-size: var(--text-lg);
+      font-weight: 500;
+      margin-top: var(--space-xs);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl);
+      box-shadow: var(--shadow-lg);
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: var(--color-border-hover);
+    }
+
+    /* Auth Section */
+    .auth-section {
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .form-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-surface-elevated);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text-primary);
+      font-size: var(--text-base);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: var(--space-md) var(--space-xl);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--text-base);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+      width: 100%;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-primary);
+      border: 1px solid var(--color-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    /* Alert Messages */
+    .alert {
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--color-error);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* Content Section */
+    .content-section {
+      display: none;
+      margin-top: var(--space-2xl);
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .file-list {
+      margin-bottom: var(--space-xl);
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-lg);
+      background: var(--color-surface-elevated);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-md);
+      transition: all 0.2s ease;
+      group: hover;
+    }
+
+    .file-item:hover {
+      border-color: var(--color-border-hover);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .file-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex: 1;
+    }
+
+    .file-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      font-size: var(--text-lg);
+    }
+
+    .file-details h3 {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 0.125rem;
+    }
+
+    .file-details p {
+      font-size: var(--text-xs);
+      color: var(--color-text-tertiary);
+      font-weight: 500;
+    }
+
+    .download-btn {
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--text-sm);
+      border-radius: var(--radius-sm);
+    }
+
+    /* Package Download */
+    .package-download {
+      padding: var(--space-xl);
+      background: var(--gradient-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      text-align: center;
+    }
+
+    .package-download h3 {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+      color: var(--color-text-primary);
+    }
+
+    .package-download p {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-lg);
+      font-size: var(--text-sm);
+    }
+
+    .btn-package {
+      background: var(--gradient-primary);
+      color: white;
+      padding: var(--space-lg) var(--space-2xl);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      border-radius: var(--radius-lg);
+      width: 100%;
+    }
+
+    .btn-package:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Notifications */
+    .notification {
+      position: fixed;
+      top: var(--space-lg);
+      right: var(--space-lg);
+      max-width: 20rem;
+      padding: var(--space-lg);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      z-index: 1000;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .notification-success {
+      background: rgba(34, 197, 94, 0.9);
+      color: white;
+    }
+
+    .notification-error {
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+    }
+
+    .notification-content {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .notification-icon {
+      font-size: var(--text-lg);
+      margin-top: 0.125rem;
+    }
+
+    .notification-text h4 {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .notification-text p {
+      opacity: 0.9;
+      font-size: var(--text-xs);
+    }
+
+    /* Animations */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(1rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 640px) {
+      body {
+        padding: var(--space-md);
+      }
+
+      .container {
+        padding-top: var(--space-xl);
+      }
+
+      .brand-name {
+        font-size: var(--text-2xl);
+      }
+
+      .tagline {
+        font-size: var(--text-base);
+      }
+
+      .card {
+        padding: var(--space-xl);
+      }
+
+      .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+      }
+
+      .file-info {
+        width: 100%;
+      }
+
+      .download-btn {
+        align-self: stretch;
+        justify-content: center;
+      }
+
+      .notification {
+        left: var(--space-md);
+        right: var(--space-md);
+        max-width: none;
+      }
+    }
+
+    @media (min-width: 641px) and (max-width: 1024px) {
+      .container {
+        max-width: 32rem;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .container {
+        max-width: 28rem;
+      }
+      
+      body {
+        padding: var(--space-2xl);
+      }
+    }
+
+    /* Focus styles for accessibility */
+    .btn:focus-visible,
+    .form-input:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">PX</div>
+      </div>
+      <h1 class="brand-name">PXLabs</h1>
+      <p class="tagline">Fortnite Optimization</p>
+    </header>
+
+    <!-- Authentication Section -->
+    <section class="auth-section" id="authSection">
+      <div class="card">
+        <form id="authForm">
+          <div class="form-group">
+            <label for="accessKey" class="form-label">Access Key</label>
+            <input 
+              type="text" 
+              id="accessKey" 
+              class="form-input"
+              maxlength="19" 
+              placeholder="PXL-XXXX-XXXX-XXXX"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <i class="fas fa-key"></i>
+            <span>Authenticate</span>
+            <i class="fas fa-spinner spinner" id="loadingSpinner" style="display: none;"></i>
+          </button>
+          
+          <div class="alert alert-error" id="errorAlert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Invalid access key. Please check and try again.</span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="content-section" id="contentSection">
+      <div class="card">
+        <div class="file-list">
+          <div class="file-item">
+            <div class="file-info">
+              <div class="file-icon">
+                <i class="fas fa-expand-arrows-alt"></i>
+              </div>
+              <div class="file-details">
+                <h3>Stretch Resolution Tool</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="file-item">
+            <div class="file-info">
+              <div class="file-icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <div class="file-details">
+                <h3>Launch Arguments (AR)</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="file-item">
+            <div class="file-info">
+              <div class="file-icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <div class="file-details">
+                <h3>Launch Arguments (EN)</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="file-item">
+            <div class="file-info">
+              <div class="file-icon">
+                <i class="fas fa-terminal"></i>
+              </div>
+              <div class="file-details">
+                <h3>Optimization Menu</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="package-download">
+          <h3>Complete Package</h3>
+          <p>Download all</p>
+          <button class="btn btn-package" onclick="handleMainDownload()">
+            <i class="fas fa-download"></i>
+            Download Everything
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Configuration
+    const CONFIG = {
+      webhookUrl: 'https://discordapp.com/api/webhooks/1396625280549912626/XQhGi-Bhx8y6EbPCIMXco36BeDdDBnFm00zaS9zvtbPjnsF3jNbUAaJ08tIYt8QGyQHi',
+      messageId: '1396631491475275777',
+      downloadUrl: 'https://pxlabs.link/fortnite-package',
+      cooldownTime: 30000, // 30 seconds
+      updateCooldown: 3000 // 3 seconds
+    };
+
+    // Valid access keys
+    const VALID_KEYS = [
+      'PXL-A7K9-M3N8-Q2W5', 'PXL-B6H4-L9J2-R8T1', 'PXL-C5G3-K8I7-S9U6',
+      'PXL-D4F2-J7H6-T0P5', 'PXL-E3E1-I6G5-U1Q4', 'PXL-F2D9-H5F4-V2R3',
+      'PXL-G1C8-G4E3-W3S2', 'PXL-H0B7-F3D2-X4T1', 'PXL-I9A6-E2C1-Y5U0',
+      'PXL-J8Z5-D1B0-Z6V9', 'PXL-K7Y4-C0A9-A7W8', 'PXL-L6X3-B9Z8-B8X7',
+      'PXL-M5W2-A8Y7-C9Y6', 'PXL-N4V1-Z7X6-D0Z5', 'PXL-O3U0-Y6W5-E1A4',
+      'PXL-P2T9-X5V4-F2B3', 'PXL-Q1S8-W4U3-G3C2', 'PXL-R0R7-V3T2-H4D1',
+      'PXL-S3Q6-U2S1-I5E0', 'PXL-T8P5-T1R0-J6F9', 'PXL-U7O4-S0Q9-K7G8',
+      'PXL-V6N3-R9P8-L8H7', 'PXL-W5M2-Q8O7-M9I6', 'PXL-X4L1-P7N6-N0J5',
+      'PXL-Y3K0-O6M5-O1K4', 'PXL-Z2J9-N5L4-P2L3', 'PXL-A1I8-M4K3-Q3M2',
+      'PXL-B0H7-L3J2-R4N1', 'PXL-C9G6-K2I1-S5O0', 'PXL-D8F5-J1H0-T6P9',
+      'PXL-E7E4-I0G9-U7Q8', 'PXL-F6D3-H9F8-V8R7', 'PXL-G5C2-G8E7-W9S6',
+      'PXL-H4B1-F7D6-X0T5', 'PXL-I3A0-E6C5-Y1U4', 'PXL-J2Z9-D5B4-Z2V3',
+      'PXL-K1Y8-C4A3-A3W2', 'PXL-L0X7-B3Z2-B4X1', 'PXL-M9W6-A2Y1-C5Y0',
+      'PXL-N8V5-Z1X0-D6Z9', 'PXL-O7U4-Y0W9-E7A8', 'PXL-P6T3-X9V8-F8B7',
+      'PXL-Q5S2-W8U7-G9C6', 'PXL-R4R1-V7T6-H0D5', 'PXL-S3Q0-U6S5-I1E4',
+      'PXL-T2P9-T5R4-J2F3', 'PXL-U1O8-S4Q3-K3G2', 'PXL-V0N7-R3P2-L4H1',
+      'PXL-W9M6-Q2O1-M5I0', 'PXL-X8L5-P1N0-N6J9', 'PXL-Y7K4-O0M9-O7K8',
+      'PXL-Z6J3-N9L8-P8L7'
+    ];
+
+    // State management
+    const state = {
+      visitCount: 0,
+      downloadCount: 0,
+      lastDownloadTime: null,
+      lastUpdateTime: null
+    };
+
+    // DOM elements
+    const elements = {
+      authSection: document.getElementById('authSection'),
+      contentSection: document.getElementById('contentSection'),
+      authForm: document.getElementById('authForm'),
+      accessKeyInput: document.getElementById('accessKey'),
+      submitBtn: document.getElementById('submitBtn'),
+      loadingSpinner: document.getElementById('loadingSpinner'),
+      errorAlert: document.getElementById('errorAlert')
+    };
+
+    // Initialize application
+    function init() {
+      loadStoredData();
+      incrementVisitCount();
+      updateDiscordWebhook();
+      setupEventListeners();
+    }
+
+    // Load data from localStorage
+    function loadStoredData() {
+      state.visitCount = parseInt(localStorage.getItem('pxlabs_visit_count') || '0');
+      state.downloadCount = parseInt(localStorage.getItem('pxlabs_download_count') || '0');
+      state.lastDownloadTime = parseInt(localStorage.getItem('pxlabs_last_download') || '0') || null;
+    }
+
+    // Save data to localStorage
+    function saveStoredData() {
+      localStorage.setItem('pxlabs_visit_count', state.visitCount.toString());
+      localStorage.setItem('pxlabs_download_count', state.downloadCount.toString());
+      if (state.lastDownloadTime) {
+        localStorage.setItem('pxlabs_last_download', state.lastDownloadTime.toString());
+      }
+    }
+
+    // Increment visit count
+    function incrementVisitCount() {
+      state.visitCount++;
+      saveStoredData();
+    }
+
+    // Check if download is allowed
+    function canDownload() {
+      if (!state.lastDownloadTime) return true;
+      return (Date.now() - state.lastDownloadTime) >= CONFIG.cooldownTime;
+    }
+
+    // Get remaining cooldown time
+    function getRemainingCooldown() {
+      if (!state.lastDownloadTime) return 0;
+      const remaining = CONFIG.cooldownTime - (Date.now() - state.lastDownloadTime);
+      return Math.max(0, Math.ceil(remaining / 1000));
+    }
+
+    // Handle download attempt
+    function attemptDownload() {
+      if (!canDownload()) {
+        const remaining = getRemainingCooldown();
+        showNotification('error', 'Download Cooldown', `Please wait ${remaining} seconds before downloading again`);
+        return false;
+      }
+
+      state.downloadCount++;
+      state.lastDownloadTime = Date.now();
+      saveStoredData();
+      updateDiscordWebhook();
+      showNotification('success', 'Download Started', 'Your download has been initiated successfully');
+      return true;
+    }
+
+    // Download handlers
+    function handleDownload() {
+      if (attemptDownload()) {
+        setTimeout(() => {
+          window.open(CONFIG.downloadUrl, '_blank');
+        }, 500);
+      }
+    }
+
+    function handleMainDownload() {
+      if (attemptDownload()) {
+        setTimeout(() => {
+          window.location.href = CONFIG.downloadUrl;
+        }, 500);
+      }
+    }
+
+    // Show notification
+    function showNotification(type, title, message) {
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      
+      const icon = type === 'success' ? 'check-circle' : 'exclamation-triangle';
+      
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-${icon} notification-icon"></i>
+          <div class="notification-text">
+            <h4>${title}</h4>
+            <p>${message}</p>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+        setTimeout(() => notification.remove(), 300);
+      }, type === 'success' ? 3000 : 4000);
+    }
+
+    // Discord webhook functions
+    async function updateDiscordWebhook() {
+      const now = Date.now();
+      
+      if (state.lastUpdateTime && (now - state.lastUpdateTime) < CONFIG.updateCooldown) {
+        return;
+      }
+
+      try {
+        const embed = createDiscordEmbed();
+        
+        const response = await fetch(`${CONFIG.webhookUrl}/messages/${CONFIG.messageId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ embeds: [embed] })
+        });
+
+        if (response.ok) {
+          state.lastUpdateTime = now;
+        } else if (response.status === 404) {
+          await createNewWebhookMessage();
+          state.lastUpdateTime = now;
+        }
+      } catch (error) {
+        console.error('Webhook update failed:', error);
+      }
+    }
+
+    async function createNewWebhookMessage() {
+      try {
+        const embed = createDiscordEmbed();
+        
+        await fetch(CONFIG.webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: 'PXLabs Monitor',
+            avatar_url: 'https://cdn.discordapp.com/attachments/123456789/123456789/pxlabs_logo.png',
+            embeds: [embed]
+          })
+        });
+      } catch (error) {
+        console.error('Failed to create webhook message:', error);
+      }
+    }
+
+    function createDiscordEmbed() {
+      const timestamp = new Date().toISOString();
+      const currentTime = new Date().toLocaleString('en-US', {
+        timeZone: 'UTC',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+
+      return {
+        title: '🚀 PXLabs - Fortnite Optimization Dashboard',
+        description: 'Analytics and monitoring system',
+        color: 0x6366F1,
+        fields: [
+          {
+            name: '👥 Total Visitors',
+            value: `**${state.visitCount.toLocaleString()}** visits`,
+            inline: true
+          },
+          {
+            name: '⬇️ Total Downloads',
+            value: `**${state.downloadCount.toLocaleString()}** downloads`,
+            inline: true
+          },
+          {
+            name: '🕒 Last Updated',
+            value: `${currentTime} UTC`,
+            inline: true
+          },
+          {
+            name: '📈 Status',
+            value: '🟢 **Online & Active**',
+            inline: true
+          }
+        ],
+        footer: {
+          text: 'PXLabs Analytics System',
+          icon_url: 'https://cdn.discordapp.com/attachments/123456789/123456789/monitor_icon.png'
+        },
+        timestamp: timestamp,
+        thumbnail: {
+          url: 'https://cdn.discordapp.com/attachments/123456789/123456789/pxlabs_thumbnail.png'
+        }
+      };
+    }
+
+    // Authentication handling
+    function setupEventListeners() {
+      elements.authForm.addEventListener('submit', handleAuth);
+      elements.accessKeyInput.addEventListener('input', clearError);
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      
+      const key = elements.accessKeyInput.value.trim().toUpperCase();
+      
+      if (!key) {
+        showError('Please enter an access key');
+        return;
+      }
+
+      setLoadingState(true);
+      clearError();
+
+      setTimeout(() => {
+        if (VALID_KEYS.includes(key)) {
+          showContent();
+        } else {
+          showError('Invalid access key. Please check and try again.');
+          setLoadingState(false);
+        }
+      }, 1000);
+    }
+
+    function setLoadingState(loading) {
+      elements.submitBtn.disabled = loading;
+      elements.loadingSpinner.style.display = loading ? 'inline-block' : 'none';
+    }
+
+    function showError(message) {
+      elements.errorAlert.querySelector('span').textContent = message;
+      elements.errorAlert.style.display = 'flex';
+      
+      setTimeout(() => {
+        elements.errorAlert.style.display = 'none';
+      }, 4000);
+    }
+
+    function clearError() {
+      elements.errorAlert.style.display = 'none';
+    }
+
+    function showContent() {
+      elements.authSection.style.display = 'none';
+      elements.contentSection.style.display = 'block';
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Make download functions globally available
+    window.handleDownload = handleDownload;
+    window.handleMainDownload = handleMainDownload;
+  </script>
+</body>
+</html>
