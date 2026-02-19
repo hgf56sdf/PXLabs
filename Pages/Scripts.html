@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PXLabs – Scripts</title>
+
+  <!-- Clean geometric sans-serif + readable body font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────
+       TOKENS
+    ───────────────────────────────────────── */
+    :root {
+      --bg:        #0d0d0f;        /* near-black background      */
+      --surface:   #141416;        /* card surface               */
+      --line:      #222226;        /* borders / dividers         */
+      --accent:    #7c5cfc;        /* single purple accent       */
+      --accent-lt: #a48afd;        /* lighter accent for text    */
+      --text:      #e8e6f0;        /* primary text               */
+      --sub:       #6e6c7e;        /* secondary / muted text     */
+      --font:      'Geist', system-ui, sans-serif;
+      --mono:      'DM Mono', monospace;
+      --r:         8px;            /* border radius              */
+      --ease:      0.18s ease;
+    }
+
+    /* ─────────────────────────────────────────
+       RESET
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html                   { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─────────────────────────────────────────
+       LAYOUT WRAPPER
+    ───────────────────────────────────────── */
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─────────────────────────────────────────
+       TOP BAR
+    ───────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 36px 0 0;
+    }
+
+    /* Site name — mono, tiny, dimmed */
+    .wordmark {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--sub);
+      user-select: none;
+    }
+
+    /* Language toggle */
+    #lang-btn {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 6px 14px;
+      border-radius: var(--r);
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--sub);
+      cursor: pointer;
+      transition: color var(--ease), border-color var(--ease);
+    }
+
+    #lang-btn:hover {
+      color: var(--text);
+      border-color: var(--sub);
+    }
+
+    /* ─────────────────────────────────────────
+       HERO — large centered title
+    ───────────────────────────────────────── */
+    .hero {
+      padding: 72px 0 56px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    /* accent dot */
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero p {
+      margin-top: 14px;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--sub);
+      letter-spacing: 0.01em;
+    }
+
+    /* ─────────────────────────────────────────
+       SEARCH
+    ───────────────────────────────────────── */
+    .search-row {
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    /* Magnifier icon */
+    .search-row svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      stroke: var(--sub);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+      transition: stroke var(--ease);
+    }
+
+    [dir="rtl"] .search-row svg { left: auto; right: 14px; }
+
+    #search-input {
+      width: 100%;
+      padding: 11px 16px 11px 40px;
+      border-radius: var(--r);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 400;
+      outline: none;
+      transition: border-color var(--ease);
+    }
+
+    [dir="rtl"] #search-input { padding: 11px 40px 11px 16px; }
+
+    #search-input::placeholder { color: var(--sub); }
+
+    #search-input:focus { border-color: var(--accent); }
+
+    #search-input:focus + svg,           /* icon follow */
+    .search-row:focus-within svg { stroke: var(--accent-lt); }
+
+    /* ─────────────────────────────────────────
+       SECTION LABEL
+    ───────────────────────────────────────── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 16px;
+    }
+
+    /* thin rule */
+    .rule {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+
+    /* ─────────────────────────────────────────
+       CARDS GRID
+    ───────────────────────────────────────── */
+    #cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;          /* gap = border illusion via bg seam */
+      background: var(--line);   /* fills the gap color */
+      border: 1px solid var(--line);
+      border-radius: calc(var(--r) + 2px);
+      overflow: hidden;
+    }
+
+    /* ─── Individual card ─── */
+    .script-card {
+      background: var(--surface);
+      padding: 24px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: background var(--ease);
+      /* animate in */
+      animation: appear 0.3s ease both;
+    }
+
+    .script-card:hover { background: #18181c; }
+
+    /* icon label row */
+    .card-tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--accent-lt);
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .card-desc {
+      font-size: 0.80rem;
+      font-weight: 300;
+      color: var(--sub);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* Download button — plain outlined */
+    .btn-dl {
+      align-self: flex-start;
+      margin-top: 6px;
+      padding: 7px 16px;
+      border-radius: var(--r);
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--sub);
+      font-family: var(--font);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color var(--ease), border-color var(--ease);
+      white-space: nowrap;
+    }
+
+    .btn-dl:hover {
+      color: var(--accent-lt);
+      border-color: var(--accent);
+    }
+
+    /* ─────────────────────────────────────────
+       EMPTY STATE
+    ───────────────────────────────────────── */
+    .empty {
+      grid-column: 1 / -1;
+      padding: 56px 24px;
+      text-align: center;
+      color: var(--sub);
+      font-size: 0.85rem;
+      font-weight: 300;
+      background: var(--surface);
+    }
+
+    /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+    footer {
+      margin-top: 64px;
+      padding-bottom: 40px;
+      text-align: center;
+      font-size: 0.72rem;
+      font-family: var(--mono);
+      color: var(--sub);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─────────────────────────────────────────
+       ANIMATION
+    ───────────────────────────────────────── */
+    @keyframes appear {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 560px) {
+      .hero      { padding: 56px 0 44px; }
+      .hero h1   { font-size: 2rem; }
+      #cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- ─── TOP BAR ─── -->
+    <header>
+      <span class="wordmark" id="wordmark">PXLabs — Scripts</span>
+      <button id="lang-btn" onclick="toggleLang()">العربية</button>
+    </header>
+
+    <!-- ─── HERO ─── -->
+    <section class="hero">
+      <h1 id="hero-title">PXLabs<em>.</em><br />Scripts</h1>
+      <p id="hero-sub">DS4 controller scripts, ready to download.</p>
+    </section>
+
+    <!-- ─── SEARCH ─── -->
+    <div class="search-row">
+      <input
+        type="search"
+        id="search-input"
+        placeholder="Search scripts…"
+        autocomplete="off"
+        spellcheck="false"
+        oninput="filterScripts()"
+        aria-label="Search scripts"
+      />
+      <!-- Magnifier SVG placed after input so CSS sibling trick works -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </div>
+
+    <!-- ─── SCRIPTS ─── -->
+    <div class="section-label" id="section-lbl">Available</div>
+    <hr class="rule" />
+    <div id="cards-grid" role="list" aria-label="Scripts"></div>
+
+    <!-- ─── FOOTER ─── -->
+    <footer>
+      <span id="footer-text">© 2026 PXLabs — All Rights Reserved</span>
+    </footer>
+
+  </div><!-- /page -->
+
+
+  <script>
+    /* ═══════════════════════════════════════════
+       SCRIPT DATA
+       To add or edit scripts, modify this array.
+       Replace link:'#' with a real download URL.
+    ═══════════════════════════════════════════ */
+    const SCRIPTS = [
+      {
+        id: 1,
+        title:    'MW3 — Extra Aim Assist',
+        title_ar: 'MW3 — مساعدة تصويب إضافية',
+        desc:     'Boosts aim assist sensitivity for DS4 controllers in Modern Warfare 3.',
+        desc_ar:  'يعزز حساسية مساعدة التصويب لمتحكم DS4 في Modern Warfare 3.',
+        link: '#',
+      },
+      {
+        id: 2,
+        title:    'BO6 — Extra Aim Assist',
+        title_ar: 'BO6 — مساعدة تصويب إضافية',
+        desc:     'Enhanced aim assist script for DS4 controllers in Black Ops 6.',
+        desc_ar:  'سكريبت تحسين مساعدة التصويب لمتحكم DS4 في Black Ops 6.',
+        link: '#',
+      },
+      {
+        id: 3,
+        title:    'BO7 — Extra Aim Assist',
+        title_ar: 'BO7 — مساعدة تصويب إضافية',
+        desc:     'Enhanced aim assist script for DS4 controllers in Black Ops 7.',
+        desc_ar:  'سكريبت تحسين مساعدة التصويب لمتحكم DS4 في Black Ops 7.',
+        link: '#',
+      },
+      {
+        id: 4,
+        title:    'YY — Macro',
+        title_ar: 'YY — ماكرو',
+        desc:     'Rapid weapon-swap (YY) macro script optimised for DS4 controllers.',
+        desc_ar:  'ماكرو تبديل السلاح السريع (YY) مُحسَّن لمتحكم DS4.',
+        link: '#',
+      },
+    ];
+
+    /* ═══════════════════════════════════════════
+       TRANSLATIONS — all UI strings
+    ═══════════════════════════════════════════ */
+    const T = {
+      en: {
+        lang_btn:     'العربية',
+        wordmark:     'PXLabs — Scripts',
+        hero_title:   null, // set via HTML — accent dot can't be text node
+        hero_sub:     'DS4 controller scripts, ready to download.',
+        section_lbl:  'Available',
+        search_ph:    'Search scripts…',
+        tag:          'DS4 Script',
+        btn_dl:       'Download',
+        empty:        'No scripts match your search.',
+        footer:       '© 2026 PXLabs — All Rights Reserved',
+      },
+      ar: {
+        lang_btn:     'English',
+        wordmark:     'PXLabs — سكريبتس',
+        hero_sub:     'سكريبتات DS4 جاهزة للتحميل.',
+        section_lbl:  'المتاح',
+        search_ph:    'ابحث عن سكريبت…',
+        tag:          'سكريبت DS4',
+        btn_dl:       'تحميل',
+        empty:        'لا توجد نتائج مطابقة.',
+        footer:       '© 2026 PXLabs — جميع الحقوق محفوظة',
+      },
+    };
+
+    /* ═══════════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════════ */
+    let lang = 'en';
+
+    /* ═══════════════════════════════════════════
+       RENDER CARDS
+       Filters by search query, rebuilds the grid.
+    ═══════════════════════════════════════════ */
+    function renderCards(query) {
+      const grid = document.getElementById('cards-grid');
+      const t    = T[lang];
+      const q    = (query || '').trim().toLowerCase();
+
+      const visible = SCRIPTS.filter(s => {
+        if (!q) return true;
+        const title = (lang === 'ar' ? s.title_ar : s.title).toLowerCase();
+        const desc  = (lang === 'ar' ? s.desc_ar  : s.desc ).toLowerCase();
+        return title.includes(q) || desc.includes(q);
+      });
+
+      if (!visible.length) {
+        grid.innerHTML = `<div class="empty">${t.empty}</div>`;
+        return;
+      }
+
+      grid.innerHTML = visible.map((s, i) => {
+        const title = lang === 'ar' ? s.title_ar : s.title;
+        const desc  = lang === 'ar' ? s.desc_ar  : s.desc;
+        return `
+          <div class="script-card" role="listitem" style="animation-delay:${i * 0.05}s">
+            <span class="card-tag">${t.tag}</span>
+            <div class="card-title">${esc(title)}</div>
+            <div class="card-desc">${esc(desc)}</div>
+            <a class="btn-dl" href="${esc(s.link)}" target="_blank" rel="noopener noreferrer">
+              ${t.btn_dl}
+            </a>
+          </div>`;
+      }).join('');
+    }
+
+    /* ═══════════════════════════════════════════
+       LIVE SEARCH
+    ═══════════════════════════════════════════ */
+    function filterScripts() {
+      renderCards(document.getElementById('search-input').value);
+    }
+
+    /* ═══════════════════════════════════════════
+       LANGUAGE TOGGLE
+    ═══════════════════════════════════════════ */
+    function toggleLang() {
+      lang = lang === 'en' ? 'ar' : 'en';
+      const t    = T[lang];
+      const html = document.documentElement;
+
+      /* Direction & language attribute */
+      html.setAttribute('lang', lang);
+      html.setAttribute('dir',  lang === 'ar' ? 'rtl' : 'ltr');
+
+      /* Static UI text */
+      document.getElementById('lang-btn').textContent     = t.lang_btn;
+      document.getElementById('wordmark').textContent     = t.wordmark;
+      document.getElementById('hero-sub').textContent     = t.hero_sub;
+      document.getElementById('section-lbl').textContent  = t.section_lbl;
+      document.getElementById('search-input').placeholder = t.search_ph;
+      document.getElementById('footer-text').textContent  = t.footer;
+
+      /* Re-render cards in new language */
+      renderCards(document.getElementById('search-input').value);
+    }
+
+    /* ═══════════════════════════════════════════
+       UTILITY — basic HTML escaping
+    ═══════════════════════════════════════════ */
+    function esc(s) {
+      return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    /* ═══════════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════════ */
+    renderCards();
+  </script>
+
+</body>
+</html>
