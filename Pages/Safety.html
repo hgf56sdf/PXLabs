@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PXLabs Safety – Official security analysis documentation for PXLabs applications">
+    <title>PXLabs – Safety</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #5865F2;
+            --secondary-purple: #9C59D8;
+            --dark-bg: #0C0C0C;
+            --dark-secondary: #1A1A1A;
+            --dark-accent: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --max-width: 1200px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --border-radius: 0.5rem;
+            --transition-fast: 0.2s ease;
+            --transition-slow: 0.3s ease;
+            --green: #57F287;
+            --yellow: #FEE75C;
+            --red: #ED4245;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; line-height: 1.2; }
+        h2 { font-size: 1.5rem; font-weight: 600; }
+        h3 { font-size: 1.25rem; font-weight: 600; }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--spacing-sm); }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(26,26,26,0.97);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--dark-accent);
+        }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm) 0; }
+        .logo-wrap { display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; cursor: pointer; }
+        .logo-text {
+            font-size: 1.5rem; font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .logo-safety {
+            font-size: 0.7rem; font-weight: 700; color: var(--green);
+            background: rgba(87,242,135,0.12); border: 1px solid rgba(87,242,135,0.35);
+            padding: 0.15rem 0.55rem; border-radius: 20px; letter-spacing: 0.06em;
+        }
+        .nav-links { display: flex; list-style: none; gap: var(--spacing-md); }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color var(--transition-fast); cursor: pointer; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .lang-toggle {
+            background: var(--dark-accent); border: none; color: var(--text-primary);
+            padding: 0.45rem var(--spacing-sm); border-radius: 20px; cursor: pointer;
+            transition: background var(--transition-fast); font-size: 0.9rem;
+        }
+        .lang-toggle:hover { background: var(--primary-blue); }
+        .mobile-menu { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.25rem; cursor: pointer; }
+
+        /* Main */
+        main { margin-top: 80px; min-height: 100vh; }
+
+        /* CRITICAL: Views controlled only by JS inline style */
+        #home-view { display: block; }
+        #doc-view  { display: none;  }
+
+        /* Hero */
+        .hero { text-align: center; padding: var(--spacing-xl) var(--spacing-sm); }
+        .hero h1 {
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero p { color: var(--text-secondary); max-width: 640px; margin: 0 auto var(--spacing-lg); line-height: 1.8; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: var(--spacing-xs);
+            background: rgba(87,242,135,0.1); border: 1px solid rgba(87,242,135,0.3);
+            color: var(--green); padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px; font-size: 0.9rem; font-weight: 600; margin-bottom: var(--spacing-md);
+        }
+
+        /* Section heading */
+        .section-heading { padding: 0 var(--spacing-sm); margin-bottom: 0; }
+        .section-heading h2 {
+            font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            border-bottom: 1px solid var(--dark-accent); padding-bottom: var(--spacing-sm);
+        }
+
+        /* Cards */
+        .nav-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg); padding: var(--spacing-lg) var(--spacing-sm) var(--spacing-xl);
+        }
+        .nav-card {
+            background: var(--dark-secondary); padding: var(--spacing-lg);
+            border-radius: var(--border-radius); color: inherit;
+            transition: all var(--transition-fast); border: 1px solid transparent;
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .nav-card:hover { transform: translateY(-3px); border-color: var(--primary-blue); }
+        .nav-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0; height: 2px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            transition: width var(--transition-slow);
+        }
+        .nav-card:hover::before { width: 100%; }
+        .card-icon { font-size: 2rem; color: var(--primary-blue); margin-bottom: var(--spacing-sm); }
+        .card-title { font-size: 1.15rem; font-weight: 600; margin-bottom: var(--spacing-xs); }
+        .card-desc { color: var(--text-secondary); font-size: 0.95rem; flex: 1; margin-bottom: var(--spacing-md); }
+        .card-meta { display: flex; align-items: center; gap: var(--spacing-xs); margin-bottom: var(--spacing-sm); }
+        .status-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+        .status-low  { background: rgba(87,242,135,0.1); border: 1px solid rgba(87,242,135,0.3); color: var(--green); }
+        .status-med  { background: rgba(254,231,92,0.1); border: 1px solid rgba(254,231,92,0.3); color: var(--yellow); }
+        .status-high { background: rgba(237,66,69,0.1);  border: 1px solid rgba(237,66,69,0.3);  color: var(--red); }
+        .card-btn {
+            display: inline-flex; align-items: center; gap: var(--spacing-xs);
+            background: var(--primary-blue); color: #fff;
+            padding: 0.6rem var(--spacing-sm); border-radius: 20px;
+            font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer;
+            transition: all var(--transition-fast); width: fit-content;
+        }
+        .card-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(88,101,242,0.35); }
+
+        /* Doc view */
+        #doc-view { padding: var(--spacing-xl) var(--spacing-sm); }
+        .doc-back-btn {
+            display: inline-flex; align-items: center; gap: var(--spacing-xs);
+            color: var(--text-secondary); background: var(--dark-secondary);
+            border: 1px solid var(--dark-accent); padding: 0.5rem var(--spacing-sm);
+            border-radius: 20px; font-size: 0.9rem; cursor: pointer; text-decoration: none;
+            transition: all var(--transition-fast); margin-bottom: var(--spacing-lg);
+        }
+        .doc-back-btn:hover { color: var(--text-primary); border-color: var(--primary-blue); }
+        .doc-app-name {
+            background: linear-gradient(45deg, var(--primary-blue), var(--secondary-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: var(--spacing-sm);
+        }
+        .doc-meta-bar { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); align-items: center; margin-bottom: var(--spacing-xl); }
+        .doc-meta-item {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            background: var(--dark-secondary); border: 1px solid var(--dark-accent);
+            padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.82rem;
+        }
+        .doc-meta-item .lbl { color: var(--text-secondary); }
+        .doc-meta-item .val { color: var(--text-primary); font-weight: 500; }
+        .doc-content { background: var(--dark-secondary); border: 1px solid var(--dark-accent); border-radius: var(--border-radius); overflow: hidden; margin-bottom: var(--spacing-lg); }
+        .doc-section { padding: var(--spacing-lg) var(--spacing-xl); border-bottom: 1px solid var(--dark-accent); }
+        .doc-section:last-child { border-bottom: none; }
+        .doc-section-title {
+            font-size: 0.82rem; font-weight: 700; color: var(--primary-blue);
+            text-transform: uppercase; letter-spacing: 0.07em;
+            margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: 0.5rem;
+        }
+        .doc-section p { color: var(--text-secondary); line-height: 1.85; margin-bottom: var(--spacing-sm); }
+        .doc-section p:last-child { margin-bottom: 0; }
+        .doc-section strong { color: var(--text-primary); }
+        .hash-box {
+            background: var(--dark-bg); border: 1px solid var(--dark-accent); border-radius: var(--border-radius);
+            padding: var(--spacing-sm) var(--spacing-md); font-family: 'Courier New', monospace;
+            font-size: 0.82rem; color: var(--green); word-break: break-all; margin: var(--spacing-sm) 0;
+        }
+        .hash-label { font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; display: block; }
+        .vt-result {
+            display: flex; align-items: center; gap: var(--spacing-md);
+            background: var(--dark-bg); border: 1px solid var(--dark-accent);
+            border-radius: var(--border-radius); padding: var(--spacing-md); margin: var(--spacing-sm) 0;
+        }
+        .vt-score { font-size: 2.5rem; font-weight: 700; color: var(--yellow); line-height: 1; white-space: nowrap; }
+        .vt-score span { font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
+        .vt-info { flex: 1; }
+        .vt-info p { color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 0.3rem; }
+        .vt-info strong { color: var(--text-primary); }
+        .detection-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); margin: var(--spacing-sm) 0; }
+        .detection-item { background: var(--dark-bg); border: 1px solid var(--dark-accent); border-radius: var(--border-radius); padding: var(--spacing-sm) var(--spacing-md); }
+        .di-label { font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.3rem; }
+        .di-value { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+        .di-value.red { color: var(--red); }
+        .info-list { list-style: none; margin: var(--spacing-sm) 0; }
+        .info-list li { display: flex; align-items: flex-start; gap: var(--spacing-sm); padding: 0.6rem 0; color: var(--text-secondary); border-bottom: 1px solid rgba(42,42,42,0.6); font-size: 0.93rem; line-height: 1.7; }
+        .info-list li:last-child { border-bottom: none; }
+        .info-list li i { color: var(--green); margin-top: 0.3rem; flex-shrink: 0; }
+        .info-list li i.warn { color: var(--yellow); }
+        .info-list li i.info-icon { color: var(--primary-blue); }
+        .vt-btn {
+            display: inline-flex; align-items: center; gap: var(--spacing-xs);
+            background: var(--primary-blue); color: #fff; padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: 30px; text-decoration: none; font-weight: 600; transition: all var(--transition-fast);
+        }
+        .vt-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(88,101,242,0.35); }
+
+        /* Footer */
+        footer { background: var(--dark-secondary); padding: var(--spacing-lg) 0; text-align: center; border-top: 1px solid var(--dark-accent); }
+        footer p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* Card entrance animation */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-card { animation: fadeUp 0.45s ease both; }
+        .nav-card:nth-child(1) { animation-delay: 0.05s; }
+        .nav-card:nth-child(2) { animation-delay: 0.12s; }
+        .nav-card:nth-child(3) { animation-delay: 0.19s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--dark-secondary); flex-direction: column; padding: var(--spacing-sm); border-bottom: 1px solid var(--dark-accent); }
+            .nav-links.open { display: flex; }
+            .mobile-menu { display: block; }
+            .nav-grid { grid-template-columns: 1fr; }
+            .detection-row { grid-template-columns: 1fr; }
+            .doc-section { padding: var(--spacing-md); }
+            .vt-result { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="container">
+        <a class="logo-wrap" href="#" onclick="goHome(event)">
+            <span class="logo-text">PXLabs</span>
+            <span class="logo-safety" id="logo-safety-txt">SAFETY</span>
+        </a>
+        <button class="mobile-menu" onclick="toggleMenu()" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="goHome(event)" data-t="nav-home">Home</a></li>
+            <li><a href="#" data-t="nav-docs">Documentation</a></li>
+        </ul>
+        <button class="lang-toggle" onclick="toggleLang()">
+            <i class="fas fa-language"></i>&nbsp;<span id="langLabel">EN</span>
+        </button>
+    </nav>
+</header>
+
+<main>
+
+    <!-- ══ HOME VIEW ══ -->
+    <div id="home-view">
+        <section class="hero container">
+            <div class="hero-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span data-t="hero-badge">Official Security Portal</span>
+            </div>
+            <h1 data-t="hero-title">PXLabs – Safety &amp; Security Documentation</h1>
+            <p data-t="hero-desc">This page provides official security analysis reports and transparency documentation for all PXLabs applications. Every tool we release is independently verified and publicly documented.</p>
+        </section>
+
+        <div class="section-heading container">
+            <h2 data-t="section-apps">Application Security Reports</h2>
+        </div>
+
+        <section class="nav-grid container">
+            <div class="nav-card">
+                <div class="card-icon"><i class="fas fa-box-open"></i></div>
+                <h3 class="card-title" data-t="card-installer-title">PXLabs – Installer</h3>
+                <p class="card-desc" data-t="card-installer-desc">Official security analysis and VirusTotal report for the PXLabs Installer.dll file.</p>
+                <div class="card-meta">
+                    <span class="status-badge status-low">
+                        <i class="fas fa-circle" style="font-size:0.45rem"></i>
+                        <span data-t="result-low">Low Risk</span>
+                    </span>
+                    <span style="color:var(--text-secondary);font-size:0.82rem;">1 / 71</span>
+                </div>
+                <button class="card-btn" onclick="openDoc('installer')">
+                    <i class="fas fa-file-shield"></i>
+                    <span data-t="btn-view">View Documentation</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ══ DOC VIEW ══ -->
+    <div id="doc-view" class="container">
+        <button class="doc-back-btn" onclick="goHome(event)">
+            <i class="fas fa-arrow-left"></i>
+            <span data-t="btn-back">Back to All Reports</span>
+        </button>
+        <div id="doc-title-area"></div>
+        <div class="doc-content" id="doc-content-body"></div>
+        <div id="doc-cta" style="margin-top:var(--spacing-md)"></div>
+    </div>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>© 2025 PXLabs. <span data-t="footer-rights">All rights reserved.</span> &nbsp;|&nbsp; <span data-t="footer-portal">Safety &amp; Transparency Portal</span></p>
+    </div>
+</footer>
+
+<script>
+/* ── Translations ── */
+const T = {
+    en: {
+        'logo-safety':           'SAFETY',
+        'nav-home':              'Home',
+        'nav-docs':              'Documentation',
+        'hero-badge':            'Official Security Portal',
+        'hero-title':            'PXLabs – Safety & Security Documentation',
+        'hero-desc':             'This page provides official security analysis reports and transparency documentation for all PXLabs applications. Every tool we release is independently verified and publicly documented.',
+        'section-apps':          'Application Security Reports',
+        'card-installer-title':  'PXLabs – Installer',
+        'card-installer-desc':   'Official security analysis and VirusTotal report for the PXLabs Installer.dll file.',
+        'result-low':            'Low Risk',
+        'btn-view':              'View Documentation',
+        'btn-back':              'Back to All Reports',
+        'btn-vt':                'View Full VirusTotal Report',
+        'footer-rights':         'All rights reserved.',
+        'footer-portal':         'Safety & Transparency Portal',
+    },
+    ar: {
+        'logo-safety':           'الأمان',
+        'nav-home':              'الرئيسية',
+        'nav-docs':              'التوثيق',
+        'hero-badge':            'بوابة الأمان الرسمية',
+        'hero-title':            'PXLabs – توثيق الأمان والحماية',
+        'hero-desc':             'تقدم هذه الصفحة تقارير تحليل أمني رسمية ووثائق شفافية لجميع تطبيقات PXLabs. كل أداة نصدرها يتم التحقق منها بشكل مستقل وتوثيقها علنًا.',
+        'section-apps':          'تقارير أمان التطبيقات',
+        'card-installer-title':  'PXLabs – المثبّت',
+        'card-installer-desc':   'تحليل أمني رسمي وتقرير VirusTotal لملف PXLabs Installer.dll.',
+        'result-low':            'خطر منخفض',
+        'btn-view':              'عرض التوثيق',
+        'btn-back':              'العودة إلى جميع التقارير',
+        'btn-vt':                'عرض تقرير VirusTotal الكامل',
+        'footer-rights':         'جميع الحقوق محفوظة.',
+        'footer-portal':         'بوابة الأمان والشفافية',
+    }
+};
+
+/* ── Docs data ── */
+const DOCS = {
+    installer: {
+        en: {
+            appName: 'PXLabs – Installer.dll',
+            sha256:  '6d291b4903e9fcbc66da3efc9a5926a8e2d585b3fdca024079d6776945a255d1',
+            vtLink:  'https://www.virustotal.com/gui/file/6d291b4903e9fcbc66da3efc9a5926a8e2d585b3fdca024079d6776945a255d1',
+            vtScore: '1 / 71',
+            status:  'low',
+            statusLabel: 'Low Risk',
+            sections: [
+                { icon:'fas fa-info-circle', title:'Overview', html:`
+                    <p>This document provides the official security analysis for the <strong>PXLabs Installer.dll</strong> file. The purpose is to give full transparency about the security posture and address any concerns about flagged detections.</p>
+                    <p>The analysis was conducted using VirusTotal, which aggregates results from <strong>71 independent security vendors</strong>. This file has been reviewed and cleared by the PXLabs security team.</p>
+                `},
+                { icon:'fas fa-fingerprint', title:'File Integrity', html:`
+                    <p>The SHA-256 hash below uniquely identifies this version of the file. Verify it matches before running the file.</p>
+                    <span class="hash-label">SHA-256 Hash</span>
+                    <div class="hash-box">6d291b4903e9fcbc66da3efc9a5926a8e2d585b3fdca024079d6776945a255d1</div>
+                    <p>If the hash does not match your downloaded file, <strong>do not run it</strong> and contact PXLabs support via Discord immediately.</p>
+                `},
+                { icon:'fas fa-virus-slash', title:'VirusTotal Scan Result', html:`
+                    <div class="vt-result">
+                        <div class="vt-score">1<span> / 71</span></div>
+                        <div class="vt-info">
+                            <p><strong>1 out of 71</strong> security vendors flagged this file as malicious.</p>
+                            <p><strong>70 vendors</strong> — including Microsoft Defender, Kaspersky, Bitdefender, ESET, Avast, and Malwarebytes — returned a <strong>clean result</strong>.</p>
+                        </div>
+                    </div>
+                `},
+                { icon:'fas fa-magnifying-glass', title:'Detection Details', html:`
+                    <div class="detection-row">
+                        <div class="detection-item"><div class="di-label">Flagging Engine</div><div class="di-value">Bkav Pro</div></div>
+                        <div class="detection-item"><div class="di-label">Detection Name</div><div class="di-value red">W64.AIDetectMalware</div></div>
+                        <div class="detection-item"><div class="di-label">Total Vendors</div><div class="di-value">71</div></div>
+                        <div class="detection-item"><div class="di-label">Vendors Flagged</div><div class="di-value red">1</div></div>
+                    </div>
+                    <p><strong>W64.AIDetectMalware</strong> is a generic heuristic label — not a confirmed malware signature. It is generated by an AI classifier known to produce false positives, especially for installer and launcher components.</p>
+                `},
+                { icon:'fas fa-microscope', title:'Security Analysis', html:`
+                    <ul class="info-list">
+                        <li><i class="fas fa-check-circle"></i><span><strong>False Positive:</strong> The Bkav Pro detection is AI-based heuristic classification, not a confirmed malware identification. This pattern is commonly triggered by legitimate tools that interact with system processes.</span></li>
+                        <li><i class="fas fa-check-circle"></i><span><strong>Industry Verification:</strong> 70 of 71 vendors — all major enterprise solutions — returned clean. This near-unanimous clearance is strong evidence the file poses no genuine threat.</span></li>
+                        <li><i class="fas fa-check-circle"></i><span><strong>No Known Signature:</strong> The file matches no entry in known malware databases. No ransomware, trojan, spyware, or worm behaviors were identified by any reputable engine.</span></li>
+                        <li><i class="fas fa-exclamation-triangle warn"></i><span><strong>Heuristic Limitations:</strong> AI heuristic engines have a higher false positive rate than signature-based detection, particularly for installer components that perform system-level operations.</span></li>
+                        <li><i class="fas fa-info-circle info-icon"></i><span><strong>Bkav Pro Context:</strong> Bkav Pro is a Vietnamese antivirus product with a significantly smaller threat database than global leaders, known in the security community for an above-average false positive rate on legitimate software.</span></li>
+                    </ul>
+                `},
+                { icon:'fas fa-clipboard-check', title:'Conclusion & Recommendation', html:`
+                    <p>Based on the comprehensive VirusTotal scan and internal review, <strong>PXLabs Installer.dll</strong> is considered <strong>safe for use</strong>. The single detection by Bkav Pro is assessed as a <strong>false positive</strong> from an AI heuristic classifier, not a confirmed malicious behavior.</p>
+                    <p>PXLabs is committed to full transparency. If you have questions, join our Discord server and contact the support team directly.</p>
+                    <ul class="info-list">
+                        <li><i class="fas fa-check-circle"></i><span>Verify the SHA-256 hash of your downloaded file before running.</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>Always download PXLabs software exclusively from official sources.</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>If your antivirus flags the file, add a manual exception for this specific verified hash.</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>Report any suspicious behavior to PXLabs via Discord immediately.</span></li>
+                    </ul>
+                `}
+            ]
+        },
+ar: {
+    appName: 'PXLabs – Installer.dll',
+    sha256:  '6d291b4903e9fcbc66da3efc9a5926a8e2d585b3fdca024079d6776945a255d1',
+    vtLink:  'https://www.virustotal.com/gui/file/6d291b4903e9fcbc66da3efc9a5926a8e2d585b3fdca024079d6776945a255d1',
+    vtScore: '1 / 71',
+    status:  'low',
+    statusLabel: 'خطر منخفض',
+    sections: [
+        { icon:'fas fa-info-circle', title:'وش السالفة؟', html:`
+            <p>هالمستند يوضح لك التحليل الأمني الرسمي لملف <strong>PXLabs Installer.dll</strong>. هدفنا الشفافية الكاملة والرد على أي استفسار بخصوص نتيجة الفحص.</p>
+            <p>سوينا الفحص عن طريق VirusTotal اللي يجمع نتائج <strong>71 شركة حماية مستقلة</strong>. وتمت مراجعة الملف من فريق الأمان في PXLabs وتأكدنا إنه سليم.</p>
+        `},
+        { icon:'fas fa-fingerprint', title:'تأكيد سلامة الملف', html:`
+            <p>البصمة الرقمية (SHA-256) هذي تميز هذا الإصدار تحديداً. تأكد إنها تطابق ملفك قبل التشغيل.</p>
+            <span class="hash-label">SHA-256</span>
+            <div class="hash-box">6d291b4903e9fcbc66da3efc9a5926a8e2d585b3fdca024079d6776945a255d1</div>
+            <p>لو ما تطابقت القيمة مع الملف اللي عندك، <strong>لا تشغله</strong> وتواصل مع دعم PXLabs في الديسكورد فوراً.</p>
+        `},
+        { icon:'fas fa-virus-slash', title:'نتيجة فحص VirusTotal', html:`
+            <div class="vt-result">
+                <div class="vt-score">1<span> / 71</span></div>
+                <div class="vt-info">
+                    <p><strong>شركة حماية وحدة من أصل 71</strong> حطت علامة تحذير على الملف.</p>
+                    <p><strong>70 شركة</strong> من ضمنهم Microsoft Defender وKaspersky وBitdefender وESET وAvast وMalwarebytes أكدوا إن الملف <strong>نظيف وآمن</strong>.</p>
+                </div>
+            </div>
+        `},
+        { icon:'fas fa-magnifying-glass', title:'تفاصيل التحذير', html:`
+            <div class="detection-row">
+                <div class="detection-item"><div class="di-label">محرك الفحص</div><div class="di-value">Bkav Pro</div></div>
+                <div class="detection-item"><div class="di-label">اسم التحذير</div><div class="di-value red">W64.AIDetectMalware</div></div>
+                <div class="detection-item"><div class="di-label">عدد شركات الحماية</div><div class="di-value">71</div></div>
+                <div class="detection-item"><div class="di-label">عدد اللي بلغوا</div><div class="di-value red">1</div></div>
+            </div>
+            <p>اسم التحذير هذا عام (ذكاء اصطناعي) ومب توقيع فايروس معروف. وغالباً يطلع مع ملفات التثبيت أو الأدوات اللي تتعامل مع النظام.</p>
+        `},
+        { icon:'fas fa-microscope', title:'التحليل الأمني', html:`
+            <ul class="info-list">
+                <li><i class="fas fa-check-circle"></i><span><strong>إيجابي كاذب:</strong> التحذير من Bkav Pro مبني على تحليل سلوكي بالذكاء الاصطناعي، مو اكتشاف فايروس فعلي. هالنوع من التحليل أحياناً يعطي إنذارات خاطئة.</span></li>
+                <li><i class="fas fa-check-circle"></i><span><strong>إجماع شركات الحماية:</strong> 70 من 71 شركة قالوا الملف نظيف، وهذا دليل قوي إنه ما فيه تهديد حقيقي.</span></li>
+                <li><i class="fas fa-check-circle"></i><span><strong>ما فيه توقيع ضار معروف:</strong> الملف ما يتطابق مع أي قاعدة بيانات فايروسات معروفة.</span></li>
+                <li><i class="fas fa-exclamation-triangle warn"></i><span><strong>ملاحظة:</strong> محركات الذكاء الاصطناعي أحياناً تعطي إنذارات زيادة عن اللزوم خصوصاً لملفات المثبتات.</span></li>
+                <li><i class="fas fa-info-circle info-icon"></i><span><strong>عن Bkav Pro:</strong> هو برنامج حماية بقاعدة بيانات أصغر مقارنةً بالشركات العالمية، ومعروف إن عنده معدل إيجابيات كاذبة أعلى من غيره.</span></li>
+            </ul>
+        `},
+        { icon:'fas fa-clipboard-check', title:'الخلاصة', html:`
+            <p>بناءً على نتيجة VirusTotal الكاملة، ملف <strong>PXLabs Installer.dll</strong> يعتبر <strong>آمن للاستخدام</strong>. التحذير الوحيد مصنف كـ <strong>إيجابي كاذب</strong> من محرك يعتمد على الذكاء الاصطناعي.</p>
+            <p>في PXLabs نهتم بالشفافية الكاملة. لو عندك أي استفسار، تقدر تدخل الديسكورد وتتواصل مع فريق الدعم مباشرة.</p>
+            <ul class="info-list">
+                <li><i class="fas fa-check-circle"></i><span>تأكد من مطابقة SHA-256 قبل تشغيل الملف.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>حمّل البرنامج فقط من المصادر الرسمية.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>إذا طلع لك تحذير، تقدر تضيف استثناء بعد ما تتأكد من البصمة.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>بلغنا فوراً لو لاحظت أي سلوك غريب.</span></li>
+            </ul>
+        `}
+    ]
+        }
+    }
+}
+/* ── State ── */
+var lang = 'en';
+var activeDoc = null;
+
+/* ── Helpers ── */
+function tx(key) {
+    return (T[lang] && T[lang][key]) ? T[lang][key] : (T.en[key] || key);
+}
+function applyTranslations() {
+    document.querySelectorAll('[data-t]').forEach(function(el) {
+        el.textContent = tx(el.getAttribute('data-t'));
+    });
+}
+
+/* ── Language ── */
+function toggleLang() {
+    lang = (lang === 'en') ? 'ar' : 'en';
+    document.getElementById('langLabel').textContent = (lang === 'ar') ? 'عربي' : 'EN';
+    document.documentElement.setAttribute('dir', (lang === 'ar') ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('lang', lang);
+    applyTranslations();
+    if (activeDoc) renderDoc(activeDoc);
+}
+
+/* ── Mobile menu ── */
+function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+}
+
+/* ── Views ── */
+function showHome() {
+    document.getElementById('home-view').style.display = 'block';
+    document.getElementById('doc-view').style.display  = 'none';
+    activeDoc = null;
+}
+
+function showDocView(docId) {
+    if (!DOCS[docId]) { showHome(); return; }
+    activeDoc = docId;
+    document.getElementById('home-view').style.display = 'none';
+    document.getElementById('doc-view').style.display  = 'block';
+    renderDoc(docId);
+    window.scrollTo(0, 0);
+}
+
+function openDoc(docId) {
+    window.location.hash = docId;
+}
+
+function goHome(e) {
+    if (e) e.preventDefault();
+    history.pushState('', document.title, window.location.pathname + window.location.search);
+    showHome();
+}
+
+/* ── Render doc ── */
+function renderDoc(docId) {
+    var data = DOCS[docId][lang] || DOCS[docId]['en'];
+
+    document.getElementById('doc-title-area').innerHTML =
+        '<h1 class="doc-app-name">' + data.appName + '</h1>' +
+        '<div class="doc-meta-bar">' +
+            '<span class="status-badge status-' + data.status + '">' +
+                '<i class="fas fa-circle" style="font-size:0.45rem"></i> ' + data.statusLabel +
+            '</span>' +
+            '<span class="doc-meta-item"><span class="lbl">VirusTotal:&nbsp;</span><span class="val">' + data.vtScore + '</span></span>' +
+            '<span class="doc-meta-item"><span class="lbl">SHA-256:&nbsp;</span><span class="val" style="font-family:monospace;font-size:0.78rem">' + data.sha256.slice(0,20) + '…</span></span>' +
+        '</div>';
+
+    var sectionsHTML = '';
+    for (var i = 0; i < data.sections.length; i++) {
+        var s = data.sections[i];
+        sectionsHTML +=
+            '<div class="doc-section">' +
+                '<div class="doc-section-title"><i class="' + s.icon + '"></i> ' + s.title + '</div>' +
+                s.html +
+            '</div>';
+    }
+    document.getElementById('doc-content-body').innerHTML = sectionsHTML;
+
+    document.getElementById('doc-cta').innerHTML =
+        '<a href="' + data.vtLink + '" target="_blank" rel="noopener noreferrer" class="vt-btn">' +
+            '<i class="fas fa-external-link-alt"></i> ' + tx('btn-vt') +
+        '</a>';
+}
+
+/* ── Hash routing ── */
+function handleHash() {
+    var hash = window.location.hash.replace(/^#/, '').trim();
+    if (hash && DOCS[hash]) {
+        showDocView(hash);
+    } else {
+        showHome();
+    }
+}
+
+window.addEventListener('hashchange', handleHash);
+
+/* ── Boot ── */
+document.addEventListener('DOMContentLoaded', function() {
+    applyTranslations();
+    handleHash();
+    document.addEventListener('click', function(e) {
+        var nl = document.getElementById('navLinks');
+        var mb = document.querySelector('.mobile-menu');
+        if (!nl.contains(e.target) && !mb.contains(e.target)) {
+            nl.classList.remove('open');
+        }
+    });
+});
+</script>
+</body>
+</html>
