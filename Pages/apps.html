@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PXLabs – Apps</title>
+
+  <!--
+    Fonts:
+    - Outfit       → English display / headings
+    - Noto Sans Arabic → Arabic text (clean & readable)
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =============================================================
+       VARIABLES
+    ============================================================= */
+    :root {
+      --bg:         #1a1a1a;
+      --surface:    #232323;
+      --border:     #2d2d2d;
+      --accent:     #7c3aed;
+      --accent-lt:  rgba(124, 58, 237, 0.12);
+      --txt:        #efefef;
+      --txt-sub:    #888;
+      --txt-muted:  #4a4a4a;
+      --radius:     9px;
+      --font-en:    'Outfit', sans-serif;
+      --font-ar:    'Noto Sans Arabic', sans-serif;
+    }
+
+    /* =============================================================
+       RESET
+    ============================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--txt);
+      font-family: var(--font-en);
+      line-height: 1.65;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Arabic body font override */
+    html[lang="ar"] body {
+      font-family: var(--font-ar);
+    }
+
+    /* =============================================================
+       TOP BAR  (lang switcher lives here)
+    ============================================================= */
+    .topbar {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 24px;
+    }
+
+    /* Flip side for RTL */
+    html[dir="rtl"] .topbar {
+      justify-content: flex-start;
+    }
+
+    /* Language toggle button */
+    #langBtn {
+      background: var(--surface);
+      color: var(--txt-sub);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    #langBtn:hover {
+      border-color: var(--accent);
+      color: var(--txt);
+    }
+
+    /* =============================================================
+       PAGE WRAPPER
+    ============================================================= */
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 24px 80px;
+    }
+
+    /* =============================================================
+       HEADER
+    ============================================================= */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .header h1 {
+      font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      color: var(--txt);
+    }
+
+    .header h1 .sep {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .header p {
+      font-size: 0.95rem;
+      color: var(--txt-sub);
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* =============================================================
+       SECTION LABEL
+    ============================================================= */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--txt-muted);
+      margin-bottom: 14px;
+    }
+
+    /* RTL: Arabic uppercase doesn't apply, keep normal */
+    html[lang="ar"] .section-label {
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 28px;
+    }
+
+    /* =============================================================
+       APPS LIST
+    ============================================================= */
+    .apps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* =============================================================
+       CARD
+    ============================================================= */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      background: #262626;
+    }
+
+    /* Left side */
+    .card-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Small icon square */
+    .app-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--accent-lt);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #a78bfa;
+    }
+
+    .app-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .card-info { min-width: 0; }
+
+    .card-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--txt);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-desc {
+      font-size: 0.83rem;
+      color: var(--txt-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Install button */
+    .btn-install {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-install:hover {
+      background: #6d28d9;
+      box-shadow: 0 3px 14px rgba(124, 58, 237, 0.4);
+    }
+
+    .btn-install svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* =============================================================
+       FOOTER
+    ============================================================= */
+    .footer {
+      margin-top: 56px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--txt-muted);
+    }
+
+    /* =============================================================
+       RESPONSIVE — mobile
+    ============================================================= */
+    @media (max-width: 500px) {
+      .card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .card-left { width: 100%; }
+
+      .btn-install {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+      }
+
+      html[dir="rtl"] .btn-install {
+        flex-direction: row-reverse;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR: language switch -->
+  <div class="topbar">
+    <button id="langBtn" onclick="toggleLang()">العربية</button>
+  </div>
+
+  <main class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+      <h1 id="siteTitle">PXLabs <span class="sep">–</span> Apps</h1>
+      <p id="siteDesc">Download and install official PXLabs applications.</p>
+    </header>
+
+    <!-- DIVIDER + SECTION LABEL -->
+    <div class="divider"></div>
+    <p class="section-label" id="sectionLabel">Available Applications</p>
+
+    <!-- APPS LIST -->
+    <div class="apps-list" id="appsList"></div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <span id="footerText">&copy; 2025 PXLabs &mdash; All rights reserved.</span>
+    </footer>
+
+  </main>
+
+  <script>
+    /* ===========================================================
+       TRANSLATIONS
+       Add more keys here as needed.
+    =========================================================== */
+    const i18n = {
+      en: {
+        lang:        "en",
+        dir:         "ltr",
+        btnLabel:    "العربية",
+        siteTitle:   "PXLabs – Apps",        /* plain text, dash handled in HTML */
+        siteDesc:    "Download and install official PXLabs applications.",
+        sectionLabel:"Available Applications",
+        installBtn:  "Install",
+        footer:      "© 2025 PXLabs — All rights reserved.",
+        apps: [
+          {
+            name: "PXLabs – Scripts",
+            desc: "DS4 script manager and downloader.",
+            icon: "scripts",
+            href: "https://cdn.discordapp.com/attachments/1301957551952494735/1474387958533456016/PXLabs_-_Scripts.zip?ex=6999aa4a&is=699858ca&hm=332f909508b6f48c5b1724188e7a4725db754db1c39010864ab7821b3e7a16c8&"
+          },
+          {
+            name: "Coming Soon",
+            desc: "Soon...",
+            icon: "gamepad",
+            href: "#"
+          },
+          {
+            name: "Coming Soon",
+            desc: "Soon...",
+            icon: "gamepad",
+            href: "#"
+          }
+        ]
+      },
+
+      ar: {
+        lang:        "ar",
+        dir:         "rtl",
+        btnLabel:    "English",
+        siteTitle:   "PXLabs – التطبيقات",
+        siteDesc:    "قم بتنزيل وتثبيت تطبيقات PXLabs الرسمية.",
+        sectionLabel:"التطبيقات المتاحة",
+        installBtn:  "تثبيت",
+        footer:      "© 2025 PXLabs — جميع الحقوق محفوظة.",
+        apps: [
+          {
+            name: "PXLabs – Scripts",
+            desc: "مدير وموزّع سكريبتات DS4.",
+            icon: "scripts",
+            href: "https://cdn.discordapp.com/attachments/1301957551952494735/1474387958533456016/PXLabs_-_Scripts.zip?ex=6999aa4a&is=699858ca&hm=332f909508b6f48c5b1724188e7a4725db754db1c39010864ab7821b3e7a16c8&"
+          },
+          {
+            name: "Coming Soon",
+            desc: "Soon...",
+            icon: "gamepad",
+            href: "#"
+          },
+          {
+            name: "Coming Soon",
+            desc: "Soon...",
+            icon: "gamepad",
+            href: "#"
+          }
+        ]
+      }
+    };
+
+    /* ===========================================================
+       SVG ICONS  (keyed by type)
+    =========================================================== */
+    const ICONS = {
+      scripts: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6"/>
+                  <polyline points="8 6 2 12 8 18"/>
+                </svg>`,
+
+      installer: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                  </svg>`,
+
+      gamepad: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="6" width="20" height="12" rx="4"/>
+                  <line x1="6" y1="12" x2="10" y2="12"/>
+                  <line x1="8" y1="10" x2="8" y2="14"/>
+                  <circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/>
+                  <circle cx="18" cy="13" r="1" fill="currentColor" stroke="none"/>
+                </svg>`
+    };
+
+    /* Download arrow used inside Install button */
+    const ARROW = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>`;
+
+    /* ===========================================================
+       STATE
+    =========================================================== */
+    let currentLang = "en";
+
+    /* ===========================================================
+       RENDER CARDS
+    =========================================================== */
+    function renderApps(lang) {
+      const t    = i18n[lang];
+      const list = document.getElementById("appsList");
+      list.innerHTML = "";
+
+      t.apps.forEach(app => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-left">
+            <div class="app-icon" aria-hidden="true">${ICONS[app.icon] || ICONS.scripts}</div>
+            <div class="card-info">
+              <div class="card-name">${app.name}</div>
+              <div class="card-desc">${app.desc}</div>
+            </div>
+          </div>
+          <a class="btn-install" href="${app.href}">
+            ${ARROW}
+            ${t.installBtn}
+          </a>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    /* ===========================================================
+       APPLY LANGUAGE  (updates DOM, dir, lang attr)
+    =========================================================== */
+    function applyLang(lang) {
+      const t   = i18n[lang];
+      const html = document.documentElement;
+
+      /* html attributes */
+      html.setAttribute("lang", t.lang);
+      html.setAttribute("dir",  t.dir);
+
+      /* header */
+      const titleEl = document.getElementById("siteTitle");
+      titleEl.innerHTML = t.siteTitle.replace("–", '<span class="sep">–</span>');
+
+      document.getElementById("siteDesc").textContent    = t.siteDesc;
+      document.getElementById("sectionLabel").textContent = t.sectionLabel;
+      document.getElementById("footerText").textContent  = t.footer;
+
+      /* language button shows the OTHER language name */
+      document.getElementById("langBtn").textContent = t.btnLabel;
+
+      /* cards */
+      renderApps(lang);
+    }
+
+    /* ===========================================================
+       TOGGLE
+    =========================================================== */
+    function toggleLang() {
+      currentLang = (currentLang === "en") ? "ar" : "en";
+      applyLang(currentLang);
+    }
+
+    /* ===========================================================
+       INIT
+    =========================================================== */
+    applyLang("en");
+  </script>
+
+</body>
+</html>
