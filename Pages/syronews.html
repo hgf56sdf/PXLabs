@@ -19,7 +19,30 @@
             overflow-x: hidden;
         }
 
-        /* Animated background gradient */
+        body[dir="rtl"] {
+            direction: rtl;
+        }
+
+        body[dir="rtl"] .header,
+        body[dir="rtl"] .news-card,
+        body[dir="rtl"] .lang-switcher {
+            text-align: right;
+        }
+
+        body[dir="rtl"] .news-date {
+            flex-direction: row-reverse;
+        }
+
+        body[dir="rtl"] .news-date::before {
+            margin-right: 0;
+            margin-left: 8px;
+        }
+
+        body[dir="rtl"] .lang-switcher {
+            left: 24px;
+            right: auto;
+        }
+
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -41,58 +64,70 @@
             z-index: 1;
         }
 
-        /* Header */
-        .header {
+        .lang-switcher {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 100;
             display: flex;
-            align-items: center;
-            gap: 16px;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            background: #1A1A25;
+            border: 1px solid #2E2E3F;
+            color: #A0A0B5;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .lang-btn:hover {
+            border-color: #3D3D55;
+            color: #F0F0F5;
+        }
+
+        .lang-btn.active {
+            background: #7C3AED;
+            border-color: #7C3AED;
+            color: white;
+        }
+
+        .header {
             margin-bottom: 40px;
             padding-bottom: 24px;
             border-bottom: 1px solid #2E2E3F;
         }
 
-        .logo {
-            width: 44px;
-            height: 44px;
-            background: #7C3AED;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 20px;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .header-text h1 {
+        .header h1 {
             font-size: 28px;
             font-weight: 700;
             color: #F0F0F5;
             letter-spacing: -0.5px;
         }
 
-        .header-text p {
+        .header p {
             font-size: 14px;
             color: #A0A0B5;
-            margin-top: 2px;
+            margin-top: 6px;
         }
 
-        /* News Grid */
         .news-grid {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
-        /* News Card */
         .news-card {
             background: #1A1A25;
             border: 1px solid #2E2E3F;
             border-radius: 16px;
             padding: 24px;
             transition: all 0.3s ease;
-            cursor: pointer;
             position: relative;
             overflow: hidden;
         }
@@ -129,7 +164,6 @@
             background: linear-gradient(90deg, #7C3AED, #A78BFA);
         }
 
-        /* Badge */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -143,27 +177,12 @@
             margin-bottom: 12px;
         }
 
-        .badge-update {
-            background: rgba(124, 58, 237, 0.15);
-            color: #A78BFA;
-        }
+        .badge-update { background: rgba(124, 58, 237, 0.15); color: #A78BFA; }
+        .badge-patch { background: rgba(34, 197, 94, 0.15); color: #22C55E; }
+        .badge-event { background: rgba(239, 68, 68, 0.15); color: #EF4444; }
+        .badge-new { background: rgba(251, 191, 36, 0.15); color: #FBBF24; }
+        .badge-maintenance { background: rgba(107, 107, 128, 0.15); color: #A0A0B5; }
 
-        .badge-patch {
-            background: rgba(34, 197, 94, 0.15);
-            color: #22C55E;
-        }
-
-        .badge-event {
-            background: rgba(239, 68, 68, 0.15);
-            color: #EF4444;
-        }
-
-        .badge-new {
-            background: rgba(251, 191, 36, 0.15);
-            color: #FBBF24;
-        }
-
-        /* Card Content */
         .news-date {
             font-size: 12px;
             color: #6B6B80;
@@ -193,166 +212,107 @@
             font-size: 14px;
             color: #A0A0B5;
             line-height: 1.6;
-            margin-bottom: 16px;
         }
 
-        .news-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .read-more {
-            color: #A78BFA;
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: gap 0.2s ease;
-        }
-
-        .read-more:hover {
-            gap: 10px;
-            color: #C4B5FD;
-        }
-
-        .read-more::after {
-            content: '→';
-        }
-
-        /* Footer */
-        .page-footer {
-            margin-top: 48px;
-            padding-top: 24px;
-            border-top: 1px solid #2E2E3F;
-            text-align: center;
-            color: #6B6B80;
-            font-size: 13px;
-        }
-
-        .page-footer a {
-            color: #A0A0B5;
-            text-decoration: none;
-        }
-
-        .page-footer a:hover {
-            color: #A78BFA;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #0A0A0F;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #2E2E3F;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3D3D55;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0F; }
+        ::-webkit-scrollbar-thumb { background: #2E2E3F; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3D3D55; }
     </style>
 <base target="_blank">
 </head>
 <body>
     <div class="bg-gradient"></div>
 
+    <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="en" onclick="setLang('en')">English</button>
+        <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">العربية</button>
+    </div>
+
     <div class="container">
         <div class="header">
-            <div class="logo">S</div>
-            <div class="header-text">
-                <h1>News & Updates</h1>
-                <p>Stay up to date with the latest Syro announcements</p>
-            </div>
+            <h1 data-key="title">News & Updates</h1>
+            <p data-key="subtitle">Stay up to date with the latest Syro announcements</p>
         </div>
 
         <div class="news-grid">
-            <!-- Featured Update -->
+            <!-- TEMPLATE: Copy from here -->
             <article class="news-card featured">
-                <span class="badge badge-update">Update</span>
+                <span class="badge badge-update" data-key="badge_update">Update</span>
                 <div class="news-date">May 27, 2026</div>
-                <h2 class="news-title">Syro Launcher v2.0 Released</h2>
-                <p class="news-excerpt">
+                <h2 class="news-title" data-key="news1_title">Syro Launcher v2.0 Released</h2>
+                <p class="news-excerpt" data-key="news1_text">
                     We're excited to announce the biggest update yet! The new launcher features a completely redesigned UI, 
-                    faster download speeds, improved game detection, and a brand new settings panel. 
-                    The dark theme has been refined with better contrast and smoother animations.
+                    faster download speeds, improved game detection, and a brand new settings panel.
                 </p>
-                <div class="news-footer">
-                    <a href="#" class="read-more">Read full patch notes</a>
-                </div>
             </article>
+            <!-- TEMPLATE: To here -->
 
-            <!-- Patch Notes -->
             <article class="news-card">
-                <span class="badge badge-patch">Patch</span>
+                <span class="badge badge-patch" data-key="badge_patch">Patch</span>
                 <div class="news-date">May 25, 2026</div>
-                <h2 class="news-title">Game Client Patch 10.40 - Bug Fixes</h2>
-                <p class="news-excerpt">
+                <h2 class="news-title" data-key="news2_title">Game Client Patch 10.40</h2>
+                <p class="news-excerpt" data-key="news2_text">
                     This patch addresses several stability issues reported by the community. 
-                    Fixed crashes on startup for certain GPU configurations, resolved audio stuttering in lobby, 
-                    and improved matchmaking connection reliability.
+                    Fixed crashes on startup and improved matchmaking reliability.
                 </p>
-                <div class="news-footer">
-                    <a href="#" class="read-more">View patch details</a>
-                </div>
-            </article>
-
-            <!-- Event -->
-            <article class="news-card">
-                <span class="badge badge-event">Event</span>
-                <div class="news-date">May 20, 2026</div>
-                <h2 class="news-title">Weekend Tournament - $500 Prize Pool</h2>
-                <p class="news-excerpt">
-                    Join us this weekend for our first community tournament! Solo queue format, 
-                    top 10 players advance to finals. Registration opens Friday at 6 PM EST. 
-                    Don't miss your chance to compete and win exclusive in-game rewards.
-                </p>
-                <div class="news-footer">
-                    <a href="#" class="read-more">Register now</a>
-                </div>
-            </article>
-
-            <!-- New Feature -->
-            <article class="news-card">
-                <span class="badge badge-new">New</span>
-                <div class="news-date">May 15, 2026</div>
-                <h2 class="news-title">Edit On Release Now Available</h2>
-                <p class="news-excerpt">
-                    You asked, we delivered. The highly requested Edit On Release feature is now 
-                    built directly into the launcher. Enable it in Settings > Game and experience 
-                    faster editing without additional tools or manual configuration.
-                </p>
-                <div class="news-footer">
-                    <a href="#" class="read-more">Learn more</a>
-                </div>
-            </article>
-
-            <!-- Maintenance -->
-            <article class="news-card">
-                <span class="badge badge-update">Maintenance</span>
-                <div class="news-date">May 10, 2026</div>
-                <h2 class="news-title">Scheduled Server Maintenance - June 1st</h2>
-                <p class="news-excerpt">
-                    Our servers will undergo maintenance on June 1st from 2:00 AM to 6:00 AM EST. 
-                    During this window, matchmaking and account services may be temporarily unavailable. 
-                    Single-player and local modes will remain accessible.
-                </p>
-                <div class="news-footer">
-                    <a href="#" class="read-more">Read details</a>
-                </div>
             </article>
         </div>
-
-        <footer class="page-footer">
-            <p>Syro &copy; 2026 · <a href="https://discord.gg/your-server">Join our Discord</a></p>
-        </footer>
     </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "News & Updates",
+                subtitle: "Stay up to date with the latest Syro announcements",
+                badge_update: "Update",
+                badge_patch: "Patch",
+                badge_event: "Event",
+                badge_new: "New",
+                badge_maintenance: "Maintenance",
+                news1_title: "Syro Launcher v2.0 Released",
+                news1_text: "We're excited to announce the biggest update yet! The new launcher features a completely redesigned UI, faster download speeds, improved game detection, and a brand new settings panel.",
+                news2_title: "Game Client Patch 10.40",
+                news2_text: "This patch addresses several stability issues reported by the community. Fixed crashes on startup and improved matchmaking reliability."
+            },
+            ar: {
+                title: "الأخبار والتحديثات",
+                subtitle: "ابقَ على اطلاع بأحدث إعلانات سيرو",
+                badge_update: "تحديث",
+                badge_patch: "تصحيح",
+                badge_event: "حدث",
+                badge_new: "جديد",
+                badge_maintenance: "صيانة",
+                news1_title: "إصدار سيرو لانشر v2.0",
+                news1_text: "يسعدنا الإعلان عن أكبر تحديث حتى الآن! يتميز اللانcher الجديد بواجهة مستخدم تم تصميمها بالكامل، وسرعات تحميل أسرع، وتحسين اكتشاف اللعبة، ولوحة إعدادات جديدة تماماً.",
+                news2_title: "تصحيح عميل اللعبة 10.40",
+                news2_text: "يعالج هذا التصحيح العديد من مشاكل الاستقرار التي أبلغ عنها المجتمع. تم إصلاح الأعطال عند بدء التشغيل وتحسين موثوقية المطابقة."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('syro_lang', lang);
+            applyLang(lang);
+        }
+
+        function applyLang(lang) {
+            const t = translations[lang];
+            document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (t[key]) el.textContent = t[key];
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+        }
+
+        // Load saved language or default to English
+        const savedLang = localStorage.getItem('syro_lang') || 'en';
+        applyLang(savedLang);
+    </script>
 </body>
 </html>
