@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syro - News</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0A0A0F;
+            color: #F0F0F5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background gradient */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #2E2E3F;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            background: #7C3AED;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .header-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #F0F0F5;
+            letter-spacing: -0.5px;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: #A0A0B5;
+            margin-top: 2px;
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* News Card */
+        .news-card {
+            background: #1A1A25;
+            border: 1px solid #2E2E3F;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #7C3AED;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .news-card:hover {
+            border-color: #3D3D55;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.1);
+        }
+
+        .news-card:hover::before {
+            opacity: 1;
+        }
+
+        .news-card.featured {
+            background: linear-gradient(135deg, #1A1A25 0%, #1E1E30 100%);
+            border-color: #7C3AED;
+        }
+
+        .news-card.featured::before {
+            opacity: 1;
+            background: linear-gradient(90deg, #7C3AED, #A78BFA);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .badge-update {
+            background: rgba(124, 58, 237, 0.15);
+            color: #A78BFA;
+        }
+
+        .badge-patch {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22C55E;
+        }
+
+        .badge-event {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+        }
+
+        .badge-new {
+            background: rgba(251, 191, 36, 0.15);
+            color: #FBBF24;
+        }
+
+        /* Card Content */
+        .news-date {
+            font-size: 12px;
+            color: #6B6B80;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .news-date::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: #6B6B80;
+            border-radius: 50%;
+        }
+
+        .news-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F0F0F5;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .news-excerpt {
+            font-size: 14px;
+            color: #A0A0B5;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .news-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .read-more {
+            color: #A78BFA;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s ease;
+        }
+
+        .read-more:hover {
+            gap: 10px;
+            color: #C4B5FD;
+        }
+
+        .read-more::after {
+            content: '→';
+        }
+
+        /* Footer */
+        .page-footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid #2E2E3F;
+            text-align: center;
+            color: #6B6B80;
+            font-size: 13px;
+        }
+
+        .page-footer a {
+            color: #A0A0B5;
+            text-decoration: none;
+        }
+
+        .page-footer a:hover {
+            color: #A78BFA;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0A0A0F;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2E2E3F;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3D3D55;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">S</div>
+            <div class="header-text">
+                <h1>News & Updates</h1>
+                <p>Stay up to date with the latest Syro announcements</p>
+            </div>
+        </div>
+
+        <div class="news-grid">
+            <!-- Featured Update -->
+            <article class="news-card featured">
+                <span class="badge badge-update">Update</span>
+                <div class="news-date">May 27, 2026</div>
+                <h2 class="news-title">Syro Launcher v2.0 Released</h2>
+                <p class="news-excerpt">
+                    We're excited to announce the biggest update yet! The new launcher features a completely redesigned UI, 
+                    faster download speeds, improved game detection, and a brand new settings panel. 
+                    The dark theme has been refined with better contrast and smoother animations.
+                </p>
+                <div class="news-footer">
+                    <a href="#" class="read-more">Read full patch notes</a>
+                </div>
+            </article>
+
+            <!-- Patch Notes -->
+            <article class="news-card">
+                <span class="badge badge-patch">Patch</span>
+                <div class="news-date">May 25, 2026</div>
+                <h2 class="news-title">Game Client Patch 10.40 - Bug Fixes</h2>
+                <p class="news-excerpt">
+                    This patch addresses several stability issues reported by the community. 
+                    Fixed crashes on startup for certain GPU configurations, resolved audio stuttering in lobby, 
+                    and improved matchmaking connection reliability.
+                </p>
+                <div class="news-footer">
+                    <a href="#" class="read-more">View patch details</a>
+                </div>
+            </article>
+
+            <!-- Event -->
+            <article class="news-card">
+                <span class="badge badge-event">Event</span>
+                <div class="news-date">May 20, 2026</div>
+                <h2 class="news-title">Weekend Tournament - $500 Prize Pool</h2>
+                <p class="news-excerpt">
+                    Join us this weekend for our first community tournament! Solo queue format, 
+                    top 10 players advance to finals. Registration opens Friday at 6 PM EST. 
+                    Don't miss your chance to compete and win exclusive in-game rewards.
+                </p>
+                <div class="news-footer">
+                    <a href="#" class="read-more">Register now</a>
+                </div>
+            </article>
+
+            <!-- New Feature -->
+            <article class="news-card">
+                <span class="badge badge-new">New</span>
+                <div class="news-date">May 15, 2026</div>
+                <h2 class="news-title">Edit On Release Now Available</h2>
+                <p class="news-excerpt">
+                    You asked, we delivered. The highly requested Edit On Release feature is now 
+                    built directly into the launcher. Enable it in Settings > Game and experience 
+                    faster editing without additional tools or manual configuration.
+                </p>
+                <div class="news-footer">
+                    <a href="#" class="read-more">Learn more</a>
+                </div>
+            </article>
+
+            <!-- Maintenance -->
+            <article class="news-card">
+                <span class="badge badge-update">Maintenance</span>
+                <div class="news-date">May 10, 2026</div>
+                <h2 class="news-title">Scheduled Server Maintenance - June 1st</h2>
+                <p class="news-excerpt">
+                    Our servers will undergo maintenance on June 1st from 2:00 AM to 6:00 AM EST. 
+                    During this window, matchmaking and account services may be temporarily unavailable. 
+                    Single-player and local modes will remain accessible.
+                </p>
+                <div class="news-footer">
+                    <a href="#" class="read-more">Read details</a>
+                </div>
+            </article>
+        </div>
+
+        <footer class="page-footer">
+            <p>Syro &copy; 2026 · <a href="https://discord.gg/your-server">Join our Discord</a></p>
+        </footer>
+    </div>
+</body>
+</html>
