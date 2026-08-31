@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ====================================================== -->
+<!--        PXLabs MW4 DS4 Profile                          -->
+<!--        Made By qtkn                                    -->
+<!--        Legit | Tournament Safe | No Automation        -->
+<!-- ====================================================== -->
+
+<DS4Windows app_version="3.3.3" config_version="5">
+
+  <!-- CORE SYSTEM -->
+  <touchToggle>True</touchToggle>
+  <idleDisconnectTimeout>0</idleDisconnectTimeout>
+  <outputDataToDS4>True</outputDataToDS4>
+  <OutputContDevice>X360</OutputContDevice>
+  <DinputOnly>False</DinputOnly>
+  <BTPollRate>1</BTPollRate>
+
+  <!-- LIGHTBAR -->
+  <LightbarMode>DS4Win</LightbarMode>
+  <Color>255,255,255</Color>
+  <ledAsBatteryIndicator>False</ledAsBatteryIndicator>
+
+  <!-- RUMBLE DISABLED FOR MAX STABILITY -->
+  <RumbleBoost>0</RumbleBoost>
+  <RumbleAutostopTime>0</RumbleAutostopTime>
+
+  <!-- LEFT STICK (MOVEMENT – CONTROLLED AGGRESSION) -->
+  <LSDeadZone>8</LSDeadZone>
+  <LSAntiDeadZone>20</LSAntiDeadZone>
+  <LSMaxZone>100</LSMaxZone>
+  <LSVerticalScale>100</LSVerticalScale>
+  <LSMaxOutput>100</LSMaxOutput>
+  <LSDeadZoneType>Radial</LSDeadZoneType>
+  <LSOuterBindDead>80</LSOuterBindDead>
+  <LSOutputCurveMode>linear</LSOutputCurveMode>
+  <LSAntiSnapback>True</LSAntiSnapback>
+  <LSAntiSnapbackDelta>135</LSAntiSnapbackDelta>
+  <LSAntiSnapbackTimeout>50</LSAntiSnapbackTimeout>
+
+  <!-- RIGHT STICK (AIM – HIGH RESPONSE MICRO CONTROL) -->
+  <RSDeadZone>4</RSDeadZone>
+  <RSAntiDeadZone>18</RSAntiDeadZone>
+  <RSMaxZone>100</RSMaxZone>
+  <RSVerticalScale>100</RSVerticalScale>
+  <RSMaxOutput>100</RSMaxOutput>
+  <RSDeadZoneType>Radial</RSDeadZoneType>
+  <RSOuterBindDead>80</RSOuterBindDead>
+  <RSOutputCurveMode>linear</RSOutputCurveMode>
+  <RSAntiSnapback>True</RSAntiSnapback>
+  <RSAntiSnapbackDelta>135</RSAntiSnapbackDelta>
+  <RSAntiSnapbackTimeout>50</RSAntiSnapbackTimeout>
+
+  <!-- AXIAL REFINEMENT -->
+  <LSAxialDeadOptions>
+    <DeadZoneX>5</DeadZoneX>
+    <DeadZoneY>5</DeadZoneY>
+    <AntiDeadZoneX>25</AntiDeadZoneX>
+    <AntiDeadZoneY>25</AntiDeadZoneY>
+    <MaxOutputX>100</MaxOutputX>
+    <MaxOutputY>100</MaxOutputY>
+  </LSAxialDeadOptions>
+
+  <RSAxialDeadOptions>
+    <DeadZoneX>4</DeadZoneX>
+    <DeadZoneY>4</DeadZoneY>
+    <AntiDeadZoneX>25</AntiDeadZoneX>
+    <AntiDeadZoneY>25</AntiDeadZoneY>
+    <MaxOutputX>100</MaxOutputX>
+    <MaxOutputY>100</MaxOutputY>
+  </RSAxialDeadOptions>
+
+  <!-- TRIGGERS – FAST ACTUATION -->
+  <L2DeadZone>0</L2DeadZone>
+  <R2DeadZone>0</R2DeadZone>
+  <L2MaxZone>95</L2MaxZone>
+  <R2MaxZone>95</R2MaxZone>
+  <L2MaxOutput>100</L2MaxOutput>
+  <R2MaxOutput>100</R2MaxOutput>
+  <L2OutputCurveMode>linear</L2OutputCurveMode>
+  <R2OutputCurveMode>linear</R2OutputCurveMode>
+
+  <!-- DISABLED FEATURES FOR CONSISTENCY -->
+  <MouseAcceleration>False</MouseAcceleration>
+  <TrackballMode>False</TrackballMode>
+  <LSSquareStick>False</LSSquareStick>
+  <RSSquareStick>False</RSSquareStick>
+
+  <!-- GYRO DISABLED FOR PURE STICK CONSISTENCY -->
+  <GyroOutputMode>Controls</GyroOutputMode>
+  <GyroMouseToggle>False</GyroMouseToggle>
+  <GyroMouseStickToggle>False</GyroMouseStickToggle>
+  <GyroMouseJitterCompensation>True</GyroMouseJitterCompensation>
+
+  <!-- ACCELERATION DISABLED -->
+  <LSDeltaAccelSettings>
+    <Enabled>False</Enabled>
+  </LSDeltaAccelSettings>
+
+  <RSDeltaAccelSettings>
+    <Enabled>False</Enabled>
+  </RSDeltaAccelSettings>
+
+  <!-- RAW INPUT MULTIPLIER -->
+  <Sensitivity>1|1|1|1|1|1</Sensitivity>
+
+  <!-- TOUCHPAD PASSTHROUGH -->
+  <TouchpadOutputMode>Controls</TouchpadOutputMode>
+
+  <!-- PROFILE ACTIONS -->
+  <ProfileActions />
+
+  <!-- CONTROL PASSTHROUGH -->
+  <Control>
+    <Button>
+      <TouchLeft>Back</TouchLeft>
+      <TouchUpper>Back</TouchUpper>
+      <TouchMulti>Back</TouchMulti>
+      <TouchRight>Back</TouchRight>
+    </Button>
+  </Control>
+
+  <ShiftControl />
+
+</DS4Windows>
